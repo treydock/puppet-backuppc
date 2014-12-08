@@ -22,9 +22,9 @@ $Conf{MaxOldLogFiles} = <%= @max_old_log_files %>;
 $Conf{DfPath} = '/bin/df';
 $Conf{DfCmd} = '$dfPath $topDir';
 $Conf{SplitPath} = '/usr/bin/split';
-$Conf{ParPath}   = '<%= scope.lookupvar('backuppc::params::par_path') %>';
-$Conf{CatPath}   = '/bin/cat';
-$Conf{GzipPath}  = '<%= scope.lookupvar('backuppc::params::gzip_path') %>';
+$Conf{ParPath} = '<%= scope.lookupvar('backuppc::params::par_path') %>';
+$Conf{CatPath} = '/bin/cat';
+$Conf{GzipPath} = '<%= scope.lookupvar('backuppc::params::gzip_path') %>';
 $Conf{Bzip2Path} = '<%= scope.lookupvar('backuppc::params::bzip2_path') %>';
 $Conf{DfMaxUsagePct} = <%= @df_max_usage_pct %>;
 $Conf{TrashCleanSleepSec} = <%= @trash_clean_sleep_sec %>;
@@ -38,11 +38,11 @@ $Conf{DHCPAddressRanges} = [
 <% end -%>
 <% end -%>];
 $Conf{BackupPCUser} = 'backuppc';
-$Conf{TopDir}      = '<%= scope.lookupvar('backuppc::server::topdir') %>';
-$Conf{ConfDir}     = '<%= scope.lookupvar('backuppc::params::config_directory') %>';
-$Conf{LogDir}      = '<%= scope.lookupvar('backuppc::params::log_directory') %>';
-$Conf{InstallDir}  = '<%= scope.lookupvar('backuppc::params::install_directory') %>';
-$Conf{CgiDir}      = '<%= scope.lookupvar('backuppc::params::cgi_directory') %>';
+$Conf{TopDir} = '<%= scope.lookupvar('backuppc::server::topdir') %>';
+$Conf{ConfDir} = '<%= scope.lookupvar('backuppc::params::config_directory') %>';
+$Conf{LogDir} = '<%= scope.lookupvar('backuppc::params::log_directory') %>';
+$Conf{InstallDir} = '<%= scope.lookupvar('backuppc::params::install_directory') %>';
+$Conf{CgiDir} = '<%= scope.lookupvar('backuppc::params::cgi_directory') %>';
 $Conf{BackupPCUserVerify} = 1;
 $Conf{HardLinkMax} = 31999;
 $Conf{PerlModuleLoad}     = undef;
@@ -52,10 +52,10 @@ $Conf{FullPeriod} = <%= @full_period %>;
 $Conf{IncrPeriod} = <%= @incr_period %>;
 $Conf{FullKeepCnt} = <%= @full_keep_cnt %>;
 $Conf{FullKeepCntMin} = 1;
-$Conf{FullAgeMax}     = <%= @full_age_max %>;
+$Conf{FullAgeMax} = <%= @full_age_max %>;
 $Conf{IncrKeepCnt} = <%= @incr_keep_cnt %>;
 $Conf{IncrKeepCntMin} = 1;
-$Conf{IncrAgeMax}     = <%= @incr_age_max %>;
+$Conf{IncrAgeMax} = <%= @incr_age_max %>;
 $Conf{IncrLevels} = [<%= @incr_levels.join(', ') %>];
 $Conf{BackupsDisable} = 0;
 $Conf{PartialAgeMax} = <%= @partial_age_max %>;
@@ -65,7 +65,7 @@ $Conf{ArchiveInfoKeepCnt} = <%= @archive_info_keep_cnt %>;
 $Conf{BackupFilesOnly} = undef;
 $Conf{BackupFilesExclude} = undef;
 $Conf{BlackoutBadPingLimit} = 3;
-$Conf{BlackoutGoodCnt}      = <%= @blackout_good_cnt %>;
+$Conf{BlackoutGoodCnt} = <%= @blackout_good_cnt %>;
 $Conf{BlackoutPeriods} = [
 <% @blackout_periods.each do |period| -%>
 <% if period.is_a?(Hash) -%>{
@@ -84,24 +84,14 @@ $Conf{SmbShareName} = 'C$';
 $Conf{SmbShareUserName} = '';
 $Conf{SmbSharePasswd} = '';
 $Conf{SmbClientPath} = '/usr/bin/smbclient';
-$Conf{SmbClientFullCmd} = '$smbClientPath \\\\$host\\$shareName'
-      . ' $I_option -U $userName -E -N -d 1'
-            . ' -c tarmode\\ full -Tc$X_option - $fileList';
-$Conf{SmbClientIncrCmd} = '$smbClientPath \\\\$host\\$shareName'
-      . ' $I_option -U $userName -E -N -d 1'
-      . ' -c tarmode\\ full -TcN$X_option $timeStampFile - $fileList';
-$Conf{SmbClientRestoreCmd} = '$smbClientPath \\\\$host\\$shareName'
-            . ' $I_option -U $userName -E -N -d 1'
-            . ' -c tarmode\\ full -Tx -';
+$Conf{SmbClientFullCmd} = '$smbClientPath \\\\$host\\$shareName $I_option -U $userName -E -N -d 1 -c tarmode\\ full -Tc$X_option - $fileList';
+$Conf{SmbClientIncrCmd} = '$smbClientPath \\\\$host\\$shareName $I_option -U $userName -E -N -d 1 -c tarmode\\ full -TcN$X_option $timeStampFile - $fileList';
+$Conf{SmbClientRestoreCmd} = '$smbClientPath \\\\$host\\$shareName $I_option -U $userName -E -N -d 1 -c tarmode\\ full -Tx -';
 $Conf{TarShareName} = '/';
-$Conf{TarClientCmd} = '$sshPath -q -x -n -l root $host'
-                    . ' env LC_ALL=C $tarPath -c -v -f - -C $shareName+'
-                    . ' --totals';
+$Conf{TarClientCmd} = '$sshPath -q -x -n -l root $host env LC_ALL=C $tarPath -c -v -f - -C $shareName+ --totals';
 $Conf{TarFullArgs} = '$fileList+';
 $Conf{TarIncrArgs} = '--newer=$incrDate+ $fileList+';
-$Conf{TarClientRestoreCmd} = '$sshPath -q -x -l root $host'
-       . ' env LC_ALL=C $tarPath -x -p --numeric-owner --same-owner'
-       . ' -v -f - -C $shareName+';
+$Conf{TarClientRestoreCmd} = '$sshPath -q -x -l root $host env LC_ALL=C $tarPath -x -p --numeric-owner --same-owner -v -f - -C $shareName+';
 $Conf{TarClientPath} = '<%= scope.lookupvar('backuppc::params::tar_path') %>';
 $Conf{RsyncClientPath} = '/usr/bin/rsync';
 $Conf{RsyncClientCmd} = '$sshPath -q -x -l root $host $rsyncPath $argList+';
@@ -113,58 +103,49 @@ $Conf{RsyncdPasswd} = '';
 $Conf{RsyncdAuthRequired} = 1;
 $Conf{RsyncCsumCacheVerifyProb} = 0.01;
 $Conf{RsyncArgs} = [
-      #
-      # Do not edit these!
-      #
-            '--numeric-ids',
-            '--perms',
-            '--owner',
-            '--group',
-            '-D',
-            '--links',
-            '--hard-links',
-            '--times',
-            '--block-size=2048',
-            '--recursive',
-      #
-      # Rsync >= 2.6.3 supports the --checksum-seed option
-            # which allows rsync checksum caching on the server.
-      # Uncomment this to enable rsync checksum caching if
-            # you have a recent client rsync version and you want
-            # to enable checksum caching.
-      #
-      #'--checksum-seed=32761',
-      #
-      # Add additional arguments here
-      #
+  '--numeric-ids',
+  '--perms',
+  '--owner',
+  '--group',
+  '-D',
+  '--links',
+  '--hard-links',
+  '--times',
+  '--block-size=2048',
+  '--recursive',
+<% if @checksum_seed -%>
+  '--checksum-seed=32761',
+<% end -%>
+<% @rsync_args.each do |arg| -%>
+  '<%= arg %>',
+<% end -%>
 ];
+<% if ! @rsync_args_extra.empty? -%>
+$Conf{RsyncArgsExtra} = [
+<% @rsync_args_extra.each do |arg| -%>
+  '<%= arg %>',
+<% end -%>
+]
+<% end -%>
 $Conf{RsyncRestoreArgs} = [
-      #
-      # Do not edit these!
-      #
-      '--numeric-ids',
-      '--perms',
-      '--owner',
-      '--group',
-      '-D',
-      '--links',
-            '--hard-links',
-      '--times',
-      '--block-size=2048',
-      '--relative',
-      '--ignore-times',
-      '--recursive',
-      #
-      # Rsync >= 2.6.3 supports the --checksum-seed option
-            # which allows rsync checksum caching on the server.
-      # Uncomment this to enable rsync checksum caching if
-            # you have a recent client rsync version and you want
-            # to enable checksum caching.
-      #
-      #'--checksum-seed=32761',
-      #
-      # Add additional arguments here
-      #
+  '--numeric-ids',
+  '--perms',
+  '--owner',
+  '--group',
+  '-D',
+  '--links',
+  '--hard-links',
+  '--times',
+  '--block-size=2048',
+  '--relative',
+  '--ignore-times',
+  '--recursive',
+<% if @checksum_seed -%>
+  '--checksum-seed=32761',
+<% end -%>
+<% @rsync_restore_args.each do |arg| -%>
+  '<%= arg %>',
+<% end -%>
 ];
 $Conf{BackupPCdShareName} = '/';
 $Conf{BackupPCdPath} = '';
@@ -174,9 +155,7 @@ $Conf{ArchiveDest} = '/tmp';
 $Conf{ArchiveComp} = 'gzip';
 $Conf{ArchivePar} = 0;
 $Conf{ArchiveSplit} = 0;
-$Conf{ArchiveClientCmd} = '$Installdir/bin/BackupPC_archiveHost'
-  . ' $tarCreatePath $splitpath $parpath $host $backupnumber'
-  . ' $compression $compext $splitsize $archiveloc $parfile *';
+$Conf{ArchiveClientCmd} = '$Installdir/bin/BackupPC_archiveHost $tarCreatePath $splitpath $parpath $host $backupnumber $compression $compext $splitsize $archiveloc $parfile *';
 $Conf{SshPath} = '/usr/bin/ssh' if -x '/usr/bin/ssh';
 $Conf{NmbLookupPath} = '/usr/bin/nmblookup';
 $Conf{NmbLookupCmd} = '$nmbLookupPath -A $host';
@@ -225,27 +204,30 @@ $Conf{CgiDateFormatMMDD} = 1;
 $Conf{CgiNavBarAdminAllHosts} = 1;
 $Conf{CgiSearchBoxEnable} = 1;
 $Conf{CgiNavBarLinks} = [
-    {
-        link  => "?action=view&type=docs",
-        lname => "Documentation",    # actually displays $Lang->{Documentation}
-    },
-    {
-        link  => "http://backuppc.wiki.sourceforge.net",
-        name  => "Wiki",              # displays literal "Wiki"
-    },
-    {
-        link  => "http://backuppc.sourceforge.net",
-        name  => "SourceForge",      # displays literal "SourceForge"
-    },
+  {
+    'link' => '?action=view&type=docs',
+    'lname' => 'Documentation',
+    'name' => undef
+  },
+  {
+    'link' => "http://backuppc.wiki.sourceforge.net",
+    'lname' => undef,
+    'name' => "Wiki"
+  },
+  {
+    'link' => "http://backuppc.sourceforge.net",
+    'lname' => undef,
+    'name' => "SourceForge"
+  }
 ];
 $Conf{CgiStatusHilightColor} = {
-    Reason_backup_failed           => '#ffcccc',
-    Reason_backup_done             => '#ccffcc',
-    Reason_no_ping                 => '#ffff99',
-    Reason_backup_canceled_by_user => '#ff9900',
-    Status_backup_in_progress      => '#66cc99',
-    Disabled_OnlyManualBackups     => '#d1d1d1',   
-    Disabled_AllBackupsDisabled    => '#d1d1d1',          
+  'Reason_backup_failed' => '#ffcccc',
+  'Reason_backup_done' => '#ccffcc',
+  'Reason_no_ping' => '#ffff99',
+  'Reason_backup_canceled_by_user' => '#ff9900',
+  'Status_backup_in_progress' => '#66cc99',
+  'Disabled_OnlyManualBackups' => '#d1d1d1',
+  'Disabled_AllBackupsDisabled' => '#d1d1d1',
 };
 $Conf{CgiHeaders} = '<meta http-equiv="pragma" content="no-cache">';
 $Conf{CgiImageDir} = '<%= scope.lookupvar('backuppc::params::cgi_image_dir') %>';
@@ -254,87 +236,87 @@ $Conf{CgiImageDirURL} = '<%= scope.lookupvar('backuppc::params::cgi_image_dir_ur
 $Conf{CgiCSSFile} = 'BackupPC_stnd.css';
 $Conf{CgiUserConfigEditEnable} = 1;
 $Conf{CgiUserConfigEdit} = {
-        FullPeriod                => 1,
-        IncrPeriod                => 1,
-        FullKeepCnt               => 1,
-        FullKeepCntMin            => 1,
-        FullAgeMax                => 1,
-        IncrKeepCnt               => 1,
-        IncrKeepCntMin            => 1,
-        IncrAgeMax                => 1,
-        IncrLevels                => 1,
-        IncrFill                  => 1,
-        PartialAgeMax             => 1,
-        RestoreInfoKeepCnt        => 1,
-        ArchiveInfoKeepCnt        => 1,
-        BackupFilesOnly           => 1,
-        BackupFilesExclude        => 1,
-        BackupsDisable            => 1,
-        BlackoutBadPingLimit      => 1,
-        BlackoutGoodCnt           => 1,
-        BlackoutPeriods           => 1,
-        BackupZeroFilesIsFatal    => 1,
-        ClientCharset             => 1,
-        ClientCharsetLegacy       => 1,
-        XferMethod                => 1,
-        XferLogLevel              => 1,
-        SmbShareName              => 1,
-        SmbShareUserName          => 1,
-        SmbSharePasswd            => 1,
-        SmbClientFullCmd          => 0,
-        SmbClientIncrCmd          => 0,
-        SmbClientRestoreCmd       => 0,
-        TarShareName              => 1,
-        TarFullArgs               => 1,
-        TarIncrArgs               => 1,
-        TarClientCmd              => 0,
-        TarClientRestoreCmd       => 0,
-        TarClientPath             => 0,
-        RsyncShareName            => 1,
-        RsyncdClientPort          => 1,
-        RsyncdPasswd              => 1,
-        RsyncdUserName            => 1,
-        RsyncdAuthRequired        => 1,
-        RsyncCsumCacheVerifyProb  => 1,
-        RsyncArgs                 => 1,
-        RsyncRestoreArgs          => 1,
-        RsyncClientCmd            => 0,
-        RsyncClientRestoreCmd     => 0,
-        RsyncClientPath           => 0,
-        ArchiveDest               => 1,
-        ArchiveComp               => 1,
-        ArchivePar                => 1,
-        ArchiveSplit              => 1,
-        ArchiveClientCmd          => 0,
-        FixedIPNetBiosNameCheck   => 1,
-        NmbLookupCmd              => 0,
-        NmbLookupFindHostCmd      => 0,
-        PingMaxMsec               => 20,
-        PingCmd                   => 0,
-        ClientTimeout             => 1,
-        MaxOldPerPCLogFiles       => 1,
-        CompressLevel             => 1,
-        ClientNameAlias           => 1,
-        DumpPreUserCmd            => 0,
-        DumpPostUserCmd           => 0,
-        RestorePreUserCmd         => 0,
-        RestorePostUserCmd        => 0,
-        ArchivePreUserCmd         => 0,
-        ArchivePostUserCmd        => 0,
-        DumpPostShareCmd          => 0,
-        DumpPreShareCmd           => 0,
-        UserCmdCheckStatus        => 0,
-        EMailNotifyMinDays        => 1,
-        EMailFromUserName         => 1,
-        EMailAdminUserName        => 1,
-        EMailUserDestDomain       => 1,
-        EMailNoBackupEverSubj     => 1,
-        EMailNoBackupEverMesg     => 1,
-        EMailNotifyOldBackupDays  => 1,
-        EMailNoBackupRecentSubj   => 1,
-        EMailNoBackupRecentMesg   => 1,
-        EMailNotifyOldOutlookDays => 1,
-        EMailOutlookBackupSubj    => 1,
-        EMailOutlookBackupMesg    => 1,
-        EMailHeaders              => 1,
+  'FullPeriod' => 1,
+  'IncrPeriod' => 1,
+  'FullKeepCnt' => 1,
+  'FullKeepCntMin' => 1,
+  'FullAgeMax' => 1,
+  'IncrKeepCnt' => 1,
+  'IncrKeepCntMin' => 1,
+  'IncrAgeMax' => 1,
+  'IncrLevels' => 1,
+  'IncrFill' => 1,
+  'PartialAgeMax' => 1,
+  'RestoreInfoKeepCnt' => 1,
+  'ArchiveInfoKeepCnt' => 1,
+  'BackupFilesOnly' => 1,
+  'BackupFilesExclude' => 1,
+  'BackupsDisable' => 1,
+  'BlackoutBadPingLimit' => 1,
+  'BlackoutGoodCnt' => 1,
+  'BlackoutPeriods' => 1,
+  'BackupZeroFilesIsFatal' => 1,
+  'ClientCharset' => 1,
+  'ClientCharsetLegacy' => 1,
+  'XferMethod' => 1,
+  'XferLogLevel' => 1,
+  'SmbShareName' => 1,
+  'SmbShareUserName' => 1,
+  'SmbSharePasswd' => 1,
+  'SmbClientFullCmd' => 0,
+  'SmbClientIncrCmd' => 0,
+  'SmbClientRestoreCmd' => 0,
+  'TarShareName' => 1,
+  'TarFullArgs' => 1,
+  'TarIncrArgs' => 1,
+  'TarClientCmd' => 0,
+  'TarClientRestoreCmd' => 0,
+  'TarClientPath' => 0,
+  'RsyncShareName' => 1,
+  'RsyncdClientPort' => 1,
+  'RsyncdPasswd' => 1,
+  'RsyncdUserName' => 1,
+  'RsyncdAuthRequired' => 1,
+  'RsyncCsumCacheVerifyProb' => 1,
+  'RsyncArgs' => 1,
+  'RsyncRestoreArgs' => 1,
+  'RsyncClientCmd' => 0,
+  'RsyncClientRestoreCmd' => 0,
+  'RsyncClientPath' => 0,
+  'ArchiveDest' => 1,
+  'ArchiveComp' => 1,
+  'ArchivePar' => 1,
+  'ArchiveSplit' => 1,
+  'ArchiveClientCmd' => 0,
+  'FixedIPNetBiosNameCheck' => 1,
+  'NmbLookupCmd' => 0,
+  'NmbLookupFindHostCmd' => 0,
+  'PingMaxMsec' => 20,
+  'PingCmd' => 0,
+  'ClientTimeout' => 1,
+  'MaxOldPerPCLogFiles' => 1,
+  'CompressLevel' => 1,
+  'ClientNameAlias' => 1,
+  'DumpPreUserCmd' => 0,
+  'DumpPostUserCmd' => 0,
+  'RestorePreUserCmd' => 0,
+  'RestorePostUserCmd' => 0,
+  'ArchivePreUserCmd' => 0,
+  'ArchivePostUserCmd' => 0,
+  'DumpPostShareCmd' => 0,
+  'DumpPreShareCmd' => 0,
+  'UserCmdCheckStatus' => 0,
+  'EMailNotifyMinDays' => 1,
+  'EMailFromUserName' => 1,
+  'EMailAdminUserName' => 1,
+  'EMailUserDestDomain' => 1,
+  'EMailNoBackupEverSubj' => 1,
+  'EMailNoBackupEverMesg' => 1,
+  'EMailNotifyOldBackupDays' => 1,
+  'EMailNoBackupRecentSubj' => 1,
+  'EMailNoBackupRecentMesg' => 1,
+  'EMailNotifyOldOutlookDays' => 1,
+  'EMailOutlookBackupSubj' => 1,
+  'EMailOutlookBackupMesg' => 1,
+  'EMailHeaders' => 1,
 };

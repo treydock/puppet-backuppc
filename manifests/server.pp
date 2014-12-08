@@ -201,6 +201,10 @@ class backuppc::server (
                                     weekDays  => [1, 2, 3, 4, 5],
                                 }, ],
   $blackout_zero_files_is_fatal = true,
+  $checksum_seed              = false,
+  $rsync_args                 = [],
+  $rsync_args_extra           = [],
+  $rsync_restore_args         = [],
   $email_notify_min_days      = 2.5,
   $email_from_user_name       = 'backuppc',
   $email_admin_user_name      = 'backuppc',
@@ -224,6 +228,7 @@ class backuppc::server (
     fail('Please provide a password for the backuppc user. This is used to login to the web based administration site.')
   }
   validate_bool($service_enable)
+  validate_bool($checksum_seed)
   validate_bool($apache_require_ssl)
   validate_bool($manage_ssh_known_hosts)
 
@@ -294,6 +299,9 @@ class backuppc::server (
   validate_array($dhcp_address_ranges)
   validate_array($incr_levels)
   validate_array($blackout_periods)
+  validate_array($rsync_args)
+  validate_array($rsync_args_extra)
+  validate_array($rsync_restore_args)
   validate_array($cgi_admin_users)
 
   validate_hash($email_headers)
