@@ -212,7 +212,8 @@ class backuppc::server (
   $apache_require_ssl         = false,
   $backuppc_password          = '',
   $backuppc_username          = 'backuppc',
-  $topdir                     = $backuppc::params::topdir
+  $topdir                     = $backuppc::params::topdir,
+  $manage_ssh_known_hosts     = true,
 ) {
   include backuppc::params
 
@@ -221,6 +222,7 @@ class backuppc::server (
   }
   validate_bool($service_enable)
   validate_bool($apache_require_ssl)
+  validate_bool($manage_ssh_known_hosts)
 
   validate_re($ensure, '^(present|absent)$',
   'ensure parameter must have a value of: present or absent')
@@ -429,11 +431,13 @@ class backuppc::server (
 
   # Ensure readable file permissions on
   # the known hosts file.
-  file { '/etc/ssh/ssh_known_hosts':
-    ensure => file,
-    owner  => 'root',
-    group  => 'root',
-    mode   => '0644',
+  if $manage_ssh_known_hosts {
+    file { '/etc/ssh/ssh_known_hosts':
+      ensure => file,
+      owner  => 'root',
+      group  => 'root',
+      mode   => '0644',
+    }
   }
 
   Sshkey <<| tag == "backuppc_sshkeys_${::fqdn}" |>>
