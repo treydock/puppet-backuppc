@@ -15,6 +15,7 @@ $Conf{WakeupSchedule} = [<%= @wakeup_schedule.join(', ') %>];
 $Conf{MaxBackups} = <%= @max_backups %>;
 $Conf{MaxUserBackups} = <%= @max_user_backups %>;
 $Conf{MaxPendingCmds} = <%= @max_pending_cmds %>;
+$Conf{CmdQueueNice} = 10;
 $Conf{MaxBackupPCNightlyJobs} = <%= @max_backup_pc_nightly_jobs %>;
 $Conf{BackupPCNightlyPeriod} = <%= @backup_pc_nightly_period %>;
 $Conf{MaxOldLogFiles} = <%= @max_old_log_files %>;
@@ -214,9 +215,9 @@ $Conf{EMailHeaders} = <<EOF;
 <%= header %>: <%= value %>
 <% end -%>
 EOF
-$Conf{CgiAdminUserGroup} = 'backuppc';
-$Conf{CgiAdminUsers}     = 'backuppc';
-$Conf{CgiURL} = 'http://'.$Conf{ServerHost}.'/backuppc/index.cgi';
+$Conf{CgiAdminUserGroup} = '<%= @cgi_admin_user_group %>';
+$Conf{CgiAdminUsers}     = '<%= @cgi_admin_users.join(' ') %>';
+$Conf{CgiURL} = '<%= @cgi_url %>';
 $Conf{Language} = 'en';
 $Conf{CgiUserHomePageCheck} = '';
 $Conf{CgiUserUrlCreate}     = 'mailto:%s';

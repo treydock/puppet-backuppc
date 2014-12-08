@@ -10,12 +10,14 @@ describe 'backuppc::client', :type => :class do
   context "On Ubuntu" do
     let(:facts) {{ :osfamily => 'Debian' }}
     let(:params) {{ :backuppc_hostname => 'backuppc.test.com' }}
-    it { should include_class("backuppc::params") }
+    it { should create_class('backuppc::client') }
+    it { should contain_class('backuppc::params') }
   end
 
   context "On RedHat" do
     let(:facts) {{ :osfamily => 'RedHat' }}
     let(:params) {{ :backuppc_hostname => 'backuppc.test.com' }}
-    it { should include_class("backuppc::params") }
+    it { should create_class('backuppc::client') }
+    it { should contain_class('backuppc::params') }
   end
 end

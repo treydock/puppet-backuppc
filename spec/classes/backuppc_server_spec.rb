@@ -10,14 +10,14 @@ describe 'backuppc::server', :type => :class do
   context "On Ubuntu" do
     let(:facts) {{ :osfamily => 'Debian' }}
     let(:params) {{ :backuppc_password => 'test_password' }}
-    it { should include_class("backuppc::params") }
-    it { should contain_package('backuppc') }
+    it { should create_class('backuppc::server') }
+    it { should contain_class('backuppc::params') }
   end
 
   context "On RedHat" do
     let(:facts) {{ :osfamily => 'RedHat' }}
     let(:params) {{ :backuppc_password => 'test_password' }}
-    it { should include_class("backuppc::params") }
-    it { should contain_package('BackupPC') }
+    it { should create_class('backuppc::server') }
+    it { should contain_class('backuppc::params') }
   end
 end

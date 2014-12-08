@@ -213,6 +213,9 @@ class backuppc::server (
   $backuppc_password          = '',
   $backuppc_username          = 'backuppc',
   $topdir                     = $backuppc::params::topdir,
+  $cgi_admin_user_group       = 'backuppc',
+  $cgi_admin_users            = ['backuppc'],
+  $cgi_url                    = "http://${::fqdn}/backuppc",
   $manage_ssh_known_hosts     = true,
 ) {
   include backuppc::params
@@ -291,10 +294,13 @@ class backuppc::server (
   validate_array($dhcp_address_ranges)
   validate_array($incr_levels)
   validate_array($blackout_periods)
+  validate_array($cgi_admin_users)
 
   validate_hash($email_headers)
 
   validate_string($apache_allow_from)
+  validate_string($cgi_admin_user_group)
+  validate_string($cgi_url)
 
   $real_incr_fill = bool2num($incr_fill)
   $real_bzfif     = bool2num($blackout_zero_files_is_fatal)
