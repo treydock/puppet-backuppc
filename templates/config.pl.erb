@@ -45,8 +45,8 @@ $Conf{InstallDir} = '<%= scope.lookupvar('backuppc::params::install_directory') 
 $Conf{CgiDir} = '<%= scope.lookupvar('backuppc::params::cgi_directory') %>';
 $Conf{BackupPCUserVerify} = '1';
 $Conf{HardLinkMax} = '31999';
-$Conf{PerlModuleLoad}     = undef;
-$Conf{ServerInitdPath} = '';
+$Conf{PerlModuleLoad} = undef;
+$Conf{ServerInitdPath} = undef;
 $Conf{ServerInitdStartCmd} = '';
 $Conf{FullPeriod} = '<%= @full_period %>';
 $Conf{IncrPeriod} = '<%= @incr_period %>';
@@ -62,8 +62,8 @@ $Conf{PartialAgeMax} = '<%= @partial_age_max %>';
 $Conf{IncrFill} = '<%= @real_incr_fill %>';
 $Conf{RestoreInfoKeepCnt} = '<%= @restore_info_keep_cnt %>';
 $Conf{ArchiveInfoKeepCnt} = '<%= @archive_info_keep_cnt %>';
-$Conf{BackupFilesOnly} = undef;
-$Conf{BackupFilesExclude} = undef;
+$Conf{BackupFilesOnly} = {};
+$Conf{BackupFilesExclude} = {};
 $Conf{BlackoutBadPingLimit} = '3';
 $Conf{BlackoutGoodCnt} = '<%= @blackout_good_cnt %>';
 $Conf{BlackoutPeriods} = [
@@ -75,19 +75,23 @@ $Conf{BlackoutPeriods} = [
 },
 <% end -%>
 <% end -%>];
-$Conf{BackupZeroFilesIsFatal} = <%= @real_bzfif %>;
+$Conf{BackupZeroFilesIsFatal} = '<%= @real_bzfif %>';
 $Conf{XferMethod} = 'rsync';
-$Conf{XferLogLevel} = 1;
+$Conf{XferLogLevel} = '1';
 $Conf{ClientCharset} = '';
 $Conf{ClientCharsetLegacy} = 'iso-8859-1';
-$Conf{SmbShareName} = 'C$';
+$Conf{SmbShareName} = [
+  'C$'
+];
 $Conf{SmbShareUserName} = '';
 $Conf{SmbSharePasswd} = '';
 $Conf{SmbClientPath} = '/usr/bin/smbclient';
 $Conf{SmbClientFullCmd} = '$smbClientPath \\\\$host\\$shareName $I_option -U $userName -E -N -d 1 -c tarmode\\ full -Tc$X_option - $fileList';
 $Conf{SmbClientIncrCmd} = '$smbClientPath \\\\$host\\$shareName $I_option -U $userName -E -N -d 1 -c tarmode\\ full -TcN$X_option $timeStampFile - $fileList';
 $Conf{SmbClientRestoreCmd} = '$smbClientPath \\\\$host\\$shareName $I_option -U $userName -E -N -d 1 -c tarmode\\ full -Tx -';
-$Conf{TarShareName} = '/';
+$Conf{TarShareName} = [
+  '/'
+];
 $Conf{TarClientCmd} = '$sshPath -q -x -n -l root $host env LC_ALL=C $tarPath -c -v -f - -C $shareName+ --totals';
 $Conf{TarFullArgs} = '$fileList+';
 $Conf{TarIncrArgs} = '--newer=$incrDate+ $fileList+';
@@ -99,11 +103,11 @@ $Conf{RsyncClientRestoreCmd} = '$sshPath -q -x -l root $host $rsyncPath $argList
 $Conf{RsyncShareName} = [
   '/'
 ];
-$Conf{RsyncdClientPort} = 873;
+$Conf{RsyncdClientPort} = '873';
 $Conf{RsyncdUserName} = '';
 $Conf{RsyncdPasswd} = '';
-$Conf{RsyncdAuthRequired} = 1;
-$Conf{RsyncCsumCacheVerifyProb} = 0.01;
+$Conf{RsyncdAuthRequired} = '1';
+$Conf{RsyncCsumCacheVerifyProb} = '0.01';
 $Conf{RsyncArgs} = [
   '--numeric-ids',
   '--perms',
@@ -149,16 +153,22 @@ $Conf{RsyncRestoreArgs} = [
   '<%= arg %>',
 <% end -%>
 ];
-$Conf{BackupPCdShareName} = '/';
-$Conf{BackupPCdPath} = '';
-$Conf{BackupPCdCmd} = '$bpcdPath $host $shareName $poolDir XXXX $poolCompress $topDir/pc/$client/new';
-$Conf{BackupPCdRestoreCmd} = '$bpcdPath TODO';
+$Conf{FtpShareName} = [
+  ''
+];
+$Conf{FtpUserName} = '';
+$Conf{FtpPasswd} = '';
+$Conf{FtpPassive} = '1';
+$Conf{FtpBlockSize} = '10240';
+$Conf{FtpPort} = '21';
+$Conf{FtpTimeout} = '120';
+$Conf{FtpFollowSymlinks} = '0';
 $Conf{ArchiveDest} = '/tmp';
 $Conf{ArchiveComp} = 'gzip';
 $Conf{ArchivePar} = '0';
 $Conf{ArchiveSplit} = '0';
 $Conf{ArchiveClientCmd} = '$Installdir/bin/BackupPC_archiveHost $tarCreatePath $splitpath $parpath $host $backupnumber $compression $compext $splitsize $archiveloc $parfile *';
-$Conf{SshPath} = '/usr/bin/ssh' if -x '/usr/bin/ssh';
+$Conf{SshPath} = '/usr/bin/ssh';
 $Conf{NmbLookupPath} = '/usr/bin/nmblookup';
 $Conf{NmbLookupCmd} = '$nmbLookupPath -A $host';
 $Conf{NmbLookupFindHostCmd} = '$nmbLookupPath $host';
@@ -169,23 +179,23 @@ $Conf{PingMaxMsec} = '20';
 $Conf{CompressLevel} = '3';
 $Conf{ClientTimeout} = '72000';
 $Conf{MaxOldPerPCLogFiles} = '12';
-$Conf{DumpPostUserCmd}    = undef;
-$Conf{DumpPreShareCmd}    = undef;
-$Conf{DumpPostShareCmd}   = undef;
-$Conf{RestorePreUserCmd}  = undef;
+$Conf{DumpPostUserCmd} = undef;
+$Conf{DumpPreShareCmd} = undef;
+$Conf{DumpPostShareCmd} = undef;
+$Conf{RestorePreUserCmd} = undef;
 $Conf{RestorePostUserCmd} = undef;
-$Conf{ArchivePreUserCmd}  = undef;
+$Conf{ArchivePreUserCmd} = undef;
 $Conf{ArchivePostUserCmd} = undef;
-$Conf{UserCmdCheckStatus} = 1;
+$Conf{UserCmdCheckStatus} = '0';
 $Conf{ClientNameAlias} = undef;
 $Conf{SendmailPath} = '/usr/sbin/sendmail';
-$Conf{EMailNotifyMinDays} = <%= @email_notify_min_days %>;
+$Conf{EMailNotifyMinDays} = '<%= @email_notify_min_days %>';
 $Conf{EMailFromUserName} = '<%= @email_from_user_name %>';
 $Conf{EMailAdminUserName} = '<%= @email_admin_user_name %>';
-$Conf{EMailUserDestDomain} = '';
+$Conf{EMailUserDestDomain} = '<%= @email_user_dest_domain %>';
 $Conf{EMailNoBackupEverSubj} = undef;
 $Conf{EMailNoBackupEverMesg} = undef;
-$Conf{EMailNotifyOldBackupDays} = <%= @email_notify_old_backup_days %>;
+$Conf{EMailNotifyOldBackupDays} = '<%= @email_notify_old_backup_days %>';
 $Conf{EMailNoBackupRecentSubj} = undef;
 $Conf{EMailNoBackupRecentMesg} = undef;
 $Conf{EMailNotifyOldOutlookDays} = '5';
@@ -197,11 +207,11 @@ $Conf{EMailHeaders} = <<EOF;
 <% end -%>
 EOF
 $Conf{CgiAdminUserGroup} = '<%= @cgi_admin_user_group %>';
-$Conf{CgiAdminUsers}     = '<%= @cgi_admin_users.join(' ') %>';
+$Conf{CgiAdminUsers} = '<%= @cgi_admin_users.join(' ') %>';
 $Conf{CgiURL} = '<%= @cgi_url %>';
 $Conf{Language} = 'en';
 $Conf{CgiUserHomePageCheck} = '';
-$Conf{CgiUserUrlCreate}     = 'mailto:%s';
+$Conf{CgiUserUrlCreate} = 'mailto:%s';
 $Conf{CgiDateFormatMMDD} = '1';
 $Conf{CgiNavBarAdminAllHosts} = '1';
 $Conf{CgiSearchBoxEnable} = '1';
@@ -212,28 +222,28 @@ $Conf{CgiNavBarLinks} = [
     'name' => undef
   },
   {
-    'link' => "http://backuppc.wiki.sourceforge.net",
+    'link' => 'http://backuppc.wiki.sourceforge.net',
     'lname' => undef,
-    'name' => "Wiki"
+    'name' => 'Wiki'
   },
   {
-    'link' => "http://backuppc.sourceforge.net",
+    'link' => 'http://backuppc.sourceforge.net',
     'lname' => undef,
-    'name' => "SourceForge"
+    'name' => 'SourceForge'
   }
 ];
 $Conf{CgiStatusHilightColor} = {
   'Reason_backup_failed' => '#ffcccc',
   'Reason_backup_done' => '#ccffcc',
-  'Reason_no_ping' => '#ffff99',
   'Reason_backup_canceled_by_user' => '#ff9900',
+  'Reason_no_ping' => '#ffff99',
   'Status_backup_in_progress' => '#66cc99',
   'Disabled_OnlyManualBackups' => '#d1d1d1',
   'Disabled_AllBackupsDisabled' => '#d1d1d1',
 };
 $Conf{CgiHeaders} = '<meta http-equiv="pragma" content="no-cache">';
 $Conf{CgiImageDir} = '<%= scope.lookupvar('backuppc::params::cgi_image_dir') %>';
-$Conf{CgiExt2ContentType} = { };
+$Conf{CgiExt2ContentType} = {};
 $Conf{CgiImageDirURL} = '<%= scope.lookupvar('backuppc::params::cgi_image_dir_url') %>';
 $Conf{CgiCSSFile} = 'BackupPC_stnd.css';
 $Conf{CgiUserConfigEditEnable} = '1';

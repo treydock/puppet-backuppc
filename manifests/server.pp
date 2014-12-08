@@ -208,6 +208,7 @@ class backuppc::server (
   $email_notify_min_days      = 2.5,
   $email_from_user_name       = 'backuppc',
   $email_admin_user_name      = 'backuppc',
+  $email_user_dest_domain     = $::domain,
   $email_notify_old_backup_days = 7,
   $email_headers              = { 'MIME-Version' => 1.0,
                                   'Content-Type' => 'text/plain; charset="iso-8859-1"', },
