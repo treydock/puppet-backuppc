@@ -211,6 +211,7 @@ class backuppc::server (
   $apache_allow_from          = 'all',
   $apache_require_ssl         = false,
   $backuppc_password          = '',
+  $backuppc_username          = 'backuppc',
   $topdir                     = $backuppc::params::topdir
 ) {
   include backuppc::params
@@ -391,7 +392,8 @@ class backuppc::server (
 
     # Create the default admin account
     backuppc::server::user { 'backuppc':
-      password => $backuppc_password
+      password => $backuppc_password,
+      username => $backuppc_username,
     }
   }
 
