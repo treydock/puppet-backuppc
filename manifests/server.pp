@@ -233,9 +233,6 @@ class backuppc::server (
   validate_bool($apache_require_ssl)
   validate_bool($manage_ssh_known_hosts)
 
-  validate_re($ensure, '^(present|absent)$',
-  'ensure parameter must have a value of: present or absent')
-
   validate_re($max_backups, '^[1-9]([0-9]*)?$',
   'Max_backups parameter should be a number')
 
@@ -314,6 +311,24 @@ class backuppc::server (
   $real_incr_fill = bool2num($incr_fill)
   $real_bzfif     = bool2num($blackout_zero_files_is_fatal)
 
+  case $ensure {
+    'present': {
+      $package_ensure   = 'installed'
+      $file_ensure      = 'file'
+      $link_ensure      = 'link'
+      $directory_ensure = 'directory'
+    }
+    'absent': {
+      $package_ensure   = 'absent'
+      $file_ensure      = 'absent'
+      $link_ensure      = 'absent'
+      $directory_ensure = 'absent'
+    }
+    default: {
+      fail("Class backuppc::server: ensure parameter must have a value of: present or absent")
+    }
+  }
+
   # Set up dependencies
   Package[$backuppc::params::package] -> File[$backuppc::params::config] -> Service[$backuppc::params::service]
 
@@ -327,7 +342,7 @@ class backuppc::server (
 
   # BackupPC package and service configuration
   package { $backuppc::params::package:
-    ensure  => $ensure,
+    ensure  => $package_ensure,
   }
 
   service { $backuppc::params::service:
@@ -338,7 +353,7 @@ class backuppc::server (
   }
 
   file { $backuppc::params::config:
-    ensure  => $ensure,
+    ensure  => $file_ensure,
     owner   => 'backuppc',
     group   => $backuppc::params::group_apache,
     mode    => '0644',
@@ -346,16 +361,17 @@ class backuppc::server (
   }
 
   file { $backuppc::params::config_directory:
-    ensure  => $ensure,
+    ensure  => $directory_ensure,
     owner   => 'backuppc',
     group   => $backuppc::params::group_apache,
     require => Package[$backuppc::params::package],
   }
 
   file { "${backuppc::params::config_directory}/pc":
-    ensure  => link,
-    target  => $backuppc::params::config_directory,
-    require => Package[$backuppc::params::package],
+    ensure  => $directory_ensure,
+    owner   => 'backuppc',
+    group   => $backuppc::params::group_apache,
+    require => File[$backuppc::params::config_directory],
   }
 
   file { [$topdir, "${topdir}/.ssh"]:
@@ -372,13 +388,13 @@ class backuppc::server (
   case $::osfamily {
     'Debian': {
       file { '/etc/BackupPC':
-        ensure => link,
+        ensure => $link_ensure,
         target => $backuppc::params::config_directory,
       }
     }
     'RedHat': {
       file { '/etc/backuppc':
-        ensure => link,
+        ensure => $link_ensure,
         target => $backuppc::params::config_directory,
       }
     }
@@ -402,7 +418,7 @@ class backuppc::server (
   # BackupPC apache configuration
   if $apache_configuration {
     file { $backuppc::params::config_apache:
-      ensure  => $ensure,
+      ensure  => $file_ensure,
       content => template("backuppc/apache_${::osfamily}.erb"),
       require => Package[$backuppc::params::package],
     }
