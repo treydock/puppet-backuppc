@@ -42,7 +42,7 @@ $Conf{PingMaxMsec} = <%= @ping_max_msec %>;
 <% if @blackout_good_cnt -%>
 $Conf{BlackoutGoodCnt}      = <%= @blackout_good_cnt %>;
 <% end -%>
-<% if @backup_files_only and ! @backup_files_only.empty? -%>
+<% if @backup_files_only and not @backup_files_only.empty? -%>
 <% if @backup_files_only.is_a?(Hash) -%>
 $Conf{BackupFilesOnly} = {
 <% @backup_files_only.each_pair do |key,value| -%>
@@ -55,7 +55,7 @@ $Conf{BackupFilesOnly} = ['<%= @backup_files_only.join("', '") %>'];
 $Conf{BackupFilesOnly} = '<%= @backup_files_only %>';
 <% end -%>
 <% end -%>
-<% if @backup_files_exclude and ! @backup_files_only.empty? -%>
+<% if @backup_files_exclude and not @backup_files_exclude.empty? -%>
 <% if @backup_files_exclude.is_a?(Hash) -%>
 $Conf{BackupFilesExclude} = {
 <% @backup_files_exclude.each_pair do |key,value| -%>
