@@ -356,7 +356,7 @@ class backuppc::server (
     ensure  => $file_ensure,
     owner   => 'backuppc',
     group   => $backuppc::params::group_apache,
-    mode    => '0644',
+    mode    => '0640',
     content => template('backuppc/config.pl.erb'),
   }
 

@@ -42,7 +42,7 @@ $Conf{PingMaxMsec} = <%= @ping_max_msec %>;
 <% if @blackout_good_cnt -%>
 $Conf{BlackoutGoodCnt}      = <%= @blackout_good_cnt %>;
 <% end -%>
-<% if @backup_files_only -%>
+<% if @backup_files_only and ! @backup_files_only.empty? -%>
 <% if @backup_files_only.is_a?(Hash) -%>
 $Conf{BackupFilesOnly} = {
 <% @backup_files_only.each_pair do |key,value| -%>
@@ -55,7 +55,7 @@ $Conf{BackupFilesOnly} = ['<%= @backup_files_only.join("', '") %>'];
 $Conf{BackupFilesOnly} = '<%= @backup_files_only %>';
 <% end -%>
 <% end -%>
-<% if @backup_files_exclude -%>
+<% if @backup_files_exclude and ! @backup_files_only.empty? -%>
 <% if @backup_files_exclude.is_a?(Hash) -%>
 $Conf{BackupFilesExclude} = {
 <% @backup_files_exclude.each_pair do |key,value| -%>
@@ -96,9 +96,7 @@ $Conf{TarShareName} = '<%= @tar_share_name %>';
 <% if @tar_client_cmd -%>
 $Conf{TarClientCmd} = '<%= @tar_client_cmd %>';
 <% elsif not @system_account.empty? -%>
-$Conf{TarClientCmd} = '$sshPath -q -x -n -l <%= @system_account %> $host'
-. ' env LC_ALL=C $tarPath -c -v -f - -C $shareName+'
-. ' --totals';
+$Conf{TarClientCmd} = '$sshPath -q -x -n -l <%= @system_account %> $host env LC_ALL=C $tarPath -c -v -f - -C $shareName+ --totals';
 <% end -%>
 <% if @tar_full_args -%>
 $Conf{TarFullArgs} = '<%= @tar_full_args %>';
@@ -109,9 +107,7 @@ $Conf{TarIncrArgs} = '<%= @tar_incr_args %>';
 <% if @tar_client_restore_cmd -%>
 $Conf{TarClientRestoreCmd} = '<%= @tar_client_restore_cmd %>';
 <% elsif not @system_account.empty? -%>
-$Conf{TarClientRestoreCmd} = '$sshPath -q -x -l <%= @system_account %> $host'
-. ' env LC_ALL=C $tarPath -x -p --numeric-owner --same-owner'
-. ' -v -f - -C $shareName+';
+$Conf{TarClientRestoreCmd} = '$sshPath -q -x -l <%= @system_account %> $host env LC_ALL=C $tarPath -x -p --numeric-owner --same-owner -v -f - -C $shareName+';
 <% end -%>
 <% if @rsync_client_cmd -%>
 $Conf{RsyncClientCmd} = '<%= @rsync_client_cmd %>';
