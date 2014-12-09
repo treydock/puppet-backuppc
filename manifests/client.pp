@@ -195,7 +195,10 @@
 #
 class backuppc::client (
   $ensure                = 'present',
+  $config_name           = $::fqdn,
+  $client_name_alias     = undef,
   $backuppc_hostname     = '',
+  $manage_system_account = true,
   $system_account        = 'backup',
   $system_home_directory = '/var/backups',
   $system_additional_commands = [],
@@ -252,6 +255,7 @@ class backuppc::client (
   $email_admin_user_name = false,
   $email_notify_old_backup_days = false,
   $hosts_file_dhcp       = 0,
+  $hosts_file_user       = 'backuppc',
   $hosts_file_more_users = '',
     ) {
   include backuppc::params
@@ -262,6 +266,8 @@ class backuppc::client (
   if empty($backuppc_hostname) {
     fail('Please provide the hostname of the node that hosts backuppc.')
   }
+
+  validate_bool($manage_system_account)
 
   validate_re($xfer_method, '^(smb|rsync|rsyncd|tar)$',
   'Xfer_method parameter must have value of: smb, rsync, rsyncd or tar')
@@ -346,21 +352,33 @@ class backuppc::client (
       content => "${system_account} ALL=(ALL:ALL) NOEXEC:NOPASSWD: ${sudo_commands_noexec}\n",
     }
 
-    user { $system_account:
-      ensure     => $ensure,
-      home       => $system_home_directory,
-      managehome => true,
-      shell      => '/bin/bash',
-      comment    => 'BackupPC',
-      system     => true,
-      password   => sha1("tyF761_${::fqdn}${::uniqueid}"),
+    if $manage_system_account {
+      $require_user = User[$system_account]
+
+      user { $system_account:
+        ensure     => $ensure,
+        home       => $system_home_directory,
+        managehome => true,
+        shell      => '/bin/bash',
+        comment    => 'BackupPC',
+        system     => true,
+        gid        => $system_account,
+        password   => sha1("tyF761_${::fqdn}${::uniqueid}"),
+      }
+
+      group { $system_account:
+        ensure  => $ensure,
+        system  => true,
+      }
+    } else {
+      $require_user = undef
     }
 
     file { $system_home_directory:
       ensure  => directory,
       owner   => $system_account,
       group   => $system_account,
-      require => User[$system_account],
+      require => $require_user,
     }
 
     file { "${system_home_directory}/.ssh":
@@ -376,7 +394,7 @@ class backuppc::client (
       group   => 'root',
       mode    => '0755',
       content => template('backuppc/client/backuppc.sh.erb'),
-      require => User[$system_account],
+      require => $require_user,
     }
 
     Ssh_authorized_key <<| tag == "backuppc_${backuppc_hostname}" |>> {
@@ -394,15 +412,15 @@ class backuppc::client (
     }
   }
 
-  @@file_line { "backuppc_host_${::fqdn}":
+  @@file_line { "backuppc_host_${config_name}":
     ensure  => $ensure,
     path    => $backuppc::params::hosts,
-    match   => "^${::fqdn}.*$",
-    line    => "${::fqdn} ${hosts_file_dhcp} backuppc ${hosts_file_more_users}\n",
+    match   => "^${config_name}.*$",
+    line    => "${config_name} ${hosts_file_dhcp} ${hosts_file_user} ${hosts_file_more_users}\n",
     tag     => "backuppc_hosts_${backuppc_hostname}",
   }
 
-  @@file { "${backuppc::params::config_directory}/pc/${::fqdn}.pl":
+  @@file { "${backuppc::params::config_directory}/pc/${config_name}.pl":
     ensure  => $ensure,
     content => template("${module_name}/host.pl.erb"),
     owner   => 'backuppc',

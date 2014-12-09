@@ -1,3 +1,6 @@
+<% if @client_name_alias -%>
+$Conf{ClientNameAlias} = '<%= @client_name_alias %>';
+<% end -%>
 $Conf{XferMethod} = '<%= @xfer_method %>';
 $Conf{XferLogLevel} = <%= @xfer_loglevel %>;
 <% if @backups_disable -%>
