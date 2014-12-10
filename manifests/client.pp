@@ -336,7 +336,7 @@ class backuppc::client (
         owner   => 'root',
         group   => 'root',
         mode    => '0440',
-        content => "${system_account} ALL=(ALL:ALL) NOPASSWD: ${sudo_commands}\n",
+        content => "${system_account} ALL=(ALL:ALL) NOPASSWD: ${sudo_commands}\nDefaults:${system_account} !requiretty\n",
       }
     } else {
       file { '/etc/sudoers.d/backuppc':
@@ -349,7 +349,7 @@ class backuppc::client (
       owner   => 'root',
       group   => 'root',
       mode    => '0440',
-      content => "${system_account} ALL=(ALL:ALL) NOEXEC:NOPASSWD: ${sudo_commands_noexec}\n",
+      content => "${system_account} ALL=(ALL:ALL) NOEXEC:NOPASSWD: ${sudo_commands_noexec}\nDefaults:${system_account} !requiretty\n",
     }
 
     if $manage_system_account {
