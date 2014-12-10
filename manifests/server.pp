@@ -329,6 +329,14 @@ class backuppc::server (
     }
   }
 
+  if $service_enable {
+    $service_ensure = 'running'
+    $notify_service = Service[$backuppc::params::service]
+  } else {
+    $service_ensure = 'stopped'
+    $notify_service = undef
+  }
+
   # Set up dependencies
   Package[$backuppc::params::package] -> File[$backuppc::params::config] -> Service[$backuppc::params::service]
 
@@ -346,7 +354,7 @@ class backuppc::server (
   }
 
   service { $backuppc::params::service:
-    ensure    => $service_enable,
+    ensure    => $service_ensure,
     enable    => $service_enable,
     hasstatus => false,
     pattern   => 'BackupPC'
@@ -358,6 +366,7 @@ class backuppc::server (
     group   => $backuppc::params::group_apache,
     mode    => '0640',
     content => template('backuppc/config.pl.erb'),
+    notify  => $notify_service,
   }
 
   file { $backuppc::params::config_directory:
@@ -453,7 +462,7 @@ class backuppc::server (
   # Hosts
   File <<| tag == "backuppc_config_${::fqdn}" |>> {
     group   => $backuppc::params::group_apache,
-    notify  => Service[$backuppc::params::service],
+    notify  => $notify_service,
     require => File["${backuppc::params::config_directory}/pc"],
   }
   File_line <<| tag == "backuppc_hosts_${::fqdn}" |>> {
