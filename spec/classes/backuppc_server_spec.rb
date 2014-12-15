@@ -4,11 +4,7 @@ describe 'backuppc::server', :type => :class do
 
   describe 'On an unknown operating system' do
     let(:facts) {{ :osfamily => 'Unknown' }}
-    it "should fail" do
-      expect do
-        subject 
-      end.to raise_error(Puppet::Error, /is not supported by this module/)
-    end
+    it { should raise_error(Puppet::Error, /is not supported by this module/) }
   end
 
   context "On Ubuntu" do
