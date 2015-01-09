@@ -37,7 +37,7 @@ $Conf{DHCPAddressRanges} = [
 <% end -%>
 <% end -%>];
 $Conf{BackupPCUser} = 'backuppc';
-$Conf{TopDir}      = '<%= scope.lookupvar('backuppc::params::topdir') %>';
+$Conf{TopDir}      = '<%= scope.lookupvar('backuppc::server::topdir') %>';
 $Conf{ConfDir}     = '<%= scope.lookupvar('backuppc::params::config_directory') %>';
 $Conf{LogDir}      = '<%= scope.lookupvar('backuppc::params::log_directory') %>';
 $Conf{InstallDir}  = '<%= scope.lookupvar('backuppc::params::install_directory') %>';

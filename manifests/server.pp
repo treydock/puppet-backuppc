@@ -160,6 +160,9 @@
 # [*backuppc_password*]
 # Password for the backuppc user used to access the web interface.
 #
+# [*topdir*]
+# Overwrite package default location for backuppc.
+#
 # === Examples
 #
 #  See tests folder.
@@ -208,6 +211,7 @@ class backuppc::server (
   $apache_allow_from          = 'all',
   $apache_require_ssl         = false,
   $backuppc_password          = '',
+  $topdir                     = $backuppc::params::topdir
 ) {
   include backuppc::params
 
@@ -336,6 +340,14 @@ class backuppc::server (
     require => Package[$backuppc::params::package],
   }
 
+  file { [$topdir, "${topdir}/.ssh"]:
+    ensure  => 'directory',
+    recurse => true,
+    owner   => 'backuppc',
+    group   => $backuppc::params::group_apache,
+    mode    => '0644',
+  }
+
   # Workaround for client exported resources that are
   # on a different osfamily. Maintain a symlink to alternative
   # config directory targets.
@@ -359,11 +371,14 @@ class backuppc::server (
   }
 
   exec { 'backuppc-ssh-keygen':
-    command => "ssh-keygen -f ${backuppc::params::topdir}/.ssh/id_rsa -C 'BackupPC on ${::fqdn}' -N ''",
+    command => "ssh-keygen -f ${topdir}/.ssh/id_rsa -C 'BackupPC on ${::fqdn}' -N ''",
     user    => 'backuppc',
-    unless  => "test -f ${backuppc::params::topdir}/.ssh/id_rsa",
+    unless  => "test -f ${topdir}/.ssh/id_rsa",
     path    => ['/usr/bin','/bin'],
-    require => Package[$backuppc::params::package],
+    require => [
+        Package[$backuppc::params::package],
+        File["${topdir}/.ssh"],
+    ],
   }
 
   # BackupPC apache configuration
