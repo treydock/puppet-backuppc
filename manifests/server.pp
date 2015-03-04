@@ -384,13 +384,12 @@ class backuppc::server (
     require => File[$backuppc::params::config_directory],
   }
 
-  file { [$topdir, "${topdir}/.ssh"]:
-    ensure  => 'directory',
-    recurse => true,
-    owner   => 'backuppc',
-    group   => 'backuppc',
-    mode    => '0644',
-  }
+#  file { [$topdir, "${topdir}/.ssh"]:
+#    ensure  => 'directory',
+#    owner   => 'backuppc',
+#    group   => 'backuppc',
+#    mode    => '0644',
+#  }
 
   # Workaround for client exported resources that are
   # on a different osfamily. Maintain a symlink to alternative
