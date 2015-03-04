@@ -420,7 +420,7 @@ class backuppc::server (
     path    => ['/usr/bin','/bin'],
     require => [
         Package[$backuppc::params::package],
-        File["${topdir}/.ssh"],
+#        File["${topdir}/.ssh"],
     ],
   }
 
