@@ -2,13 +2,16 @@ source 'https://rubygems.org'
 
 group :development, :test do
   gem 'rake',                    :require => false
-  gem 'rspec-puppet',            :require => false
+  gem 'rspec-puppet', '~> 2.x',  :require => false
   gem 'puppetlabs_spec_helper',  :require => false
-  gem 'serverspec',              :require => false
-  gem 'rspec-system',            :require => false
-  gem 'rspec-system-puppet',     :require => false
-  gem 'rspec-system-serverspec', :require => false
   gem 'puppet-lint',             :require => false
+end
+
+group :system_tests do
+  gem 'beaker', '~>2.2.0',        :require => false
+  gem 'beaker-rspec',             :require => false
+  gem 'serverspec',               :require => false
+  gem 'pry',                      :require => false unless RUBY_VERSION =~ /^1.8/
 end
 
 if facterversion = ENV['FACTER_GEM_VERSION']
