@@ -224,8 +224,7 @@ class backuppc::server (
   $cgi_admin_users            = ['backuppc'],
   $cgi_url                    = "http://${::fqdn}/backuppc",
   $manage_ssh_known_hosts     = true,
-) {
-  include backuppc::params
+) inherits backuppc::params {
 
   if empty($backuppc_password) {
     fail('Please provide a password for the backuppc user. This is used to login to the web based administration site.')
