@@ -388,7 +388,7 @@ class backuppc::server (
     ensure  => 'directory',
     recurse => true,
     owner   => 'backuppc',
-    group   => $backuppc::params::group_apache,
+    group   => 'backuppc',
     mode    => '0644',
   }
 
