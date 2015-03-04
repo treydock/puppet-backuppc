@@ -98,8 +98,8 @@ $Conf{TarIncrArgs} = '--newer=$incrDate+ $fileList+';
 $Conf{TarClientRestoreCmd} = '$sshPath -q -x -l root $host env LC_ALL=C $tarPath -x -p --numeric-owner --same-owner -v -f - -C $shareName+';
 $Conf{TarClientPath} = '<%= scope.lookupvar('backuppc::params::tar_path') %>';
 $Conf{RsyncClientPath} = '/usr/bin/rsync';
-$Conf{RsyncClientCmd} = '$sshPath -q -x -l root $host $rsyncPath $argList+';
-$Conf{RsyncClientRestoreCmd} = '$sshPath -q -x -l root $host $rsyncPath $argList+';
+$Conf{RsyncClientCmd} = '$sshPath -q -x -l <%= @rsync_cmd_default_user %> $host $rsyncPath $argList+';
+$Conf{RsyncClientRestoreCmd} = '$sshPath -q -x -l <%= @rsync_cmd_default_user %> $host $rsyncPath $argList+';
 $Conf{RsyncShareName} = [
   '/'
 ];
@@ -176,7 +176,7 @@ $Conf{FixedIPNetBiosNameCheck} = '0';
 $Conf{PingPath} = '/bin/ping';
 $Conf{PingCmd} = '$pingPath -c 1 -w 3 $host';
 $Conf{PingMaxMsec} = '20';
-$Conf{CompressLevel} = '3';
+$Conf{CompressLevel} = '<%= @compress_level %>';
 $Conf{ClientTimeout} = '72000';
 $Conf{MaxOldPerPCLogFiles} = '12';
 $Conf{DumpPreUserCmd} = undef;
