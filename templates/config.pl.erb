@@ -13,7 +13,7 @@ $Conf{MyPath} = '/bin';
 $Conf{UmaskMode} = 027;
 $Conf{WakeupSchedule} = [
 <% @wakeup_schedule.each_with_index do |schedule, index| -%>
-<% if index == @wakeup_schedule.size - 1 %>
+<% if index == @wakeup_schedule.size - 1 -%>
   '<%= schedule %>'
 <% else -%>
   '<%= schedule %>',
@@ -36,6 +36,9 @@ $Conf{GzipPath} = '<%= scope.lookupvar('backuppc::params::gzip_path') %>';
 $Conf{Bzip2Path} = '<%= scope.lookupvar('backuppc::params::bzip2_path') %>';
 $Conf{DfMaxUsagePct} = '<%= @df_max_usage_pct %>';
 $Conf{TrashCleanSleepSec} = '<%= @trash_clean_sleep_sec %>';
+<% if @dhcp_address_ranges.empty? -%>
+$Conf{DHCPAddressRanges} = [];
+<% else -%>
 $Conf{DHCPAddressRanges} = [
 <% @dhcp_address_ranges.each do |range| -%>
 <% if range.is_a?(Hash) -%>{
@@ -45,6 +48,7 @@ $Conf{DHCPAddressRanges} = [
 },
 <% end -%>
 <% end -%>];
+<% end -%>
 $Conf{BackupPCUser} = 'backuppc';
 $Conf{TopDir} = '<%= scope.lookupvar('backuppc::server::topdir') %>';
 $Conf{ConfDir} = '<%= scope.lookupvar('backuppc::params::config_directory') %>';
@@ -258,7 +262,7 @@ $Conf{CgiStatusHilightColor} = {
   'Reason_no_ping' => '#ffff99',
   'Disabled_OnlyManualBackups' => '#d1d1d1',
   'Status_backup_in_progress' => '#66cc99',
-  'Disabled_AllBackupsDisabled' => '#d1d1d1',
+  'Disabled_AllBackupsDisabled' => '#d1d1d1'
 };
 $Conf{CgiHeaders} = '<meta http-equiv="pragma" content="no-cache">';
 $Conf{CgiImageDir} = '<%= scope.lookupvar('backuppc::params::cgi_image_dir') %>';
