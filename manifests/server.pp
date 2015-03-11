@@ -204,6 +204,7 @@ class backuppc::server (
   $blackout_zero_files_is_fatal = true,
   $checksum_seed              = false,
   $rsync_cmd_default_user     = 'root',
+  $rsync_cmd_with_sudo        = false,
   $rsync_args                 = [],
   $rsync_args_extra           = [],
   $rsync_restore_args         = [],
@@ -233,6 +234,7 @@ class backuppc::server (
   validate_bool($service_enable)
   validate_bool($replace_config)
   validate_bool($checksum_seed)
+  validate_bool($rsync_cmd_with_sudo)
   validate_bool($apache_require_ssl)
   validate_bool($manage_ssh_known_hosts)
 
@@ -371,6 +373,16 @@ class backuppc::server (
     content => template('backuppc/config.pl.erb'),
     replace => $replace_config,
     notify  => $notify_service,
+  }
+
+  if ! $replace_config {
+    file { "${backuppc::params::config}.puppet":
+      ensure  => $file_ensure,
+      owner   => 'backuppc',
+      group   => $backuppc::params::group_apache,
+      mode    => '0640',
+      content => template('backuppc/config.pl.erb'),
+    }
   }
 
   file { $backuppc::params::config_directory:

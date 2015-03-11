@@ -11,7 +11,15 @@ $Conf{ServerPort} = '-1';
 $Conf{ServerMesgSecret} = '';
 $Conf{MyPath} = '/bin';
 $Conf{UmaskMode} = 027;
-$Conf{WakeupSchedule} = [<%= @wakeup_schedule.join(',') %>];
+$Conf{WakeupSchedule} = [
+<% @wakeup_schedule.each_with_index do |schedule, index| -%>
+<% if index == @wakeup_schedule.size - 1 %>
+  '<%= schedule %>'
+<% else -%>
+  '<%= schedule %>',
+<% end -%>
+<% end -%>
+];
 $Conf{MaxBackups} = '<%= @max_backups %>';
 $Conf{MaxUserBackups} = '<%= @max_user_backups %>';
 $Conf{MaxPendingCmds} = '<%= @max_pending_cmds %>';
@@ -50,13 +58,23 @@ $Conf{ServerInitdPath} = undef;
 $Conf{ServerInitdStartCmd} = '';
 $Conf{FullPeriod} = '<%= @full_period %>';
 $Conf{IncrPeriod} = '<%= @incr_period %>';
-$Conf{FullKeepCnt} = '<%= @full_keep_cnt %>';
+$Conf{FullKeepCnt} = [
+  '<%= @full_keep_cnt %>'
+];
 $Conf{FullKeepCntMin} = '1';
 $Conf{FullAgeMax} = '<%= @full_age_max %>';
 $Conf{IncrKeepCnt} = '<%= @incr_keep_cnt %>';
 $Conf{IncrKeepCntMin} = '1';
 $Conf{IncrAgeMax} = '<%= @incr_age_max %>';
-$Conf{IncrLevels} = [<%= @incr_levels.join(', ') %>];
+$Conf{IncrLevels} = [
+<% @incr_levels.each_with_index do |incr_level, index| -%>
+<% if index == @incr_levels.size - 1 -%>
+  '<%= incr_level %>'
+<% else -%>
+  '<%= incr_level %>',
+<% end -%>
+<% end -%>
+];
 $Conf{BackupsDisable} = '0';
 $Conf{PartialAgeMax} = '<%= @partial_age_max %>';
 $Conf{IncrFill} = '<%= @real_incr_fill %>';
@@ -98,8 +116,8 @@ $Conf{TarIncrArgs} = '--newer=$incrDate+ $fileList+';
 $Conf{TarClientRestoreCmd} = '$sshPath -q -x -l root $host env LC_ALL=C $tarPath -x -p --numeric-owner --same-owner -v -f - -C $shareName+';
 $Conf{TarClientPath} = '<%= scope.lookupvar('backuppc::params::tar_path') %>';
 $Conf{RsyncClientPath} = '/usr/bin/rsync';
-$Conf{RsyncClientCmd} = '$sshPath -q -x -l <%= @rsync_cmd_default_user %> $host $rsyncPath $argList+';
-$Conf{RsyncClientRestoreCmd} = '$sshPath -q -x -l <%= @rsync_cmd_default_user %> $host $rsyncPath $argList+';
+$Conf{RsyncClientCmd} = '$sshPath -q -x -l <%= @rsync_cmd_default_user %> $host <%= @rsync_cmd_with_sudo ? 'sudo ' : '' %>$rsyncPath $argList+';
+$Conf{RsyncClientRestoreCmd} = '$sshPath -q -x -l <%= @rsync_cmd_default_user %> $host <%= @rsync_cmd_with_sudo ? 'sudo ' : '' %>$rsyncPath $argList+';
 $Conf{RsyncShareName} = [
   '/'
 ];
@@ -238,8 +256,8 @@ $Conf{CgiStatusHilightColor} = {
   'Reason_backup_done' => '#ccffcc',
   'Reason_backup_canceled_by_user' => '#ff9900',
   'Reason_no_ping' => '#ffff99',
-  'Status_backup_in_progress' => '#66cc99',
   'Disabled_OnlyManualBackups' => '#d1d1d1',
+  'Status_backup_in_progress' => '#66cc99',
   'Disabled_AllBackupsDisabled' => '#d1d1d1',
 };
 $Conf{CgiHeaders} = '<meta http-equiv="pragma" content="no-cache">';
