@@ -174,6 +174,7 @@
 class backuppc::server (
   $ensure                     = 'present',
   $service_enable             = true,
+  $replace_config             = true,
   $wakeup_schedule            = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],
   $max_backups                = 4,
   $max_user_backups           = 4,
@@ -230,6 +231,7 @@ class backuppc::server (
     fail('Please provide a password for the backuppc user. This is used to login to the web based administration site.')
   }
   validate_bool($service_enable)
+  validate_bool($replace_config)
   validate_bool($checksum_seed)
   validate_bool($apache_require_ssl)
   validate_bool($manage_ssh_known_hosts)
@@ -367,6 +369,7 @@ class backuppc::server (
     group   => $backuppc::params::group_apache,
     mode    => '0640',
     content => template('backuppc/config.pl.erb'),
+    replace => $replace_config,
     notify  => $notify_service,
   }
 
