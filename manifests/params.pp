@@ -56,4 +56,5 @@ class backuppc::params {
   }
 
   $htpasswd_apache = "${config_directory}/htpasswd"
+  $client_system_account_password = sha1("tyF761_${::fqdn}${::uniqueid}")
 }

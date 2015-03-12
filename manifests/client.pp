@@ -200,6 +200,7 @@ class backuppc::client (
   $backuppc_hostname     = '',
   $manage_system_account = true,
   $system_account        = 'backup',
+  $system_account_password = $backuppc::params::client_system_account_password,
   $system_home_directory = '/var/backups',
   $system_account_uid    = undef,
   $system_account_gid    = undef,
@@ -259,8 +260,7 @@ class backuppc::client (
   $hosts_file_dhcp       = 0,
   $hosts_file_user       = 'backuppc',
   $hosts_file_more_users = '',
-    ) {
-  include backuppc::params
+) inherits backuppc::params {
 
   validate_re($ensure, '^(present|absent)$',
   'ensure parameter must have a value of: present or absent')
@@ -366,7 +366,7 @@ class backuppc::client (
         system     => true,
         uid        => $system_account_uid,
         gid        => $system_account,
-        password   => sha1("tyF761_${::fqdn}${::uniqueid}"),
+        password   => $system_account_password,
       }
 
       group { $system_account:
