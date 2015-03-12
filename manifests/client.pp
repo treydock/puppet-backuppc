@@ -210,6 +210,7 @@ class backuppc::client (
   $manage_rsync          = true,
   $full_period           = false,
   $full_keep_cnt         = false,
+  $full_keep_cnt_min     = false,
   $full_age_max          = false,
   $incr_period           = false,
   $incr_keep_cnt         = false,

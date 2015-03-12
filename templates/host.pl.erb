@@ -15,14 +15,17 @@ $Conf{IncrPeriod} = <%= @incr_period %>;
 <% if @full_keep_cnt -%>
 $Conf{FullKeepCnt} = <%= @full_keep_cnt %>;
 <% end -%>
+<% if @full_keep_cnt_min -%>
+$Conf{FullKeepCntMin} = '<%= @full_keep_cnt_min %>';
+<% end -%>
 <% if @full_age_max -%>
-$Conf{FullAgeMax}     = <%= @full_age_max %>;
+$Conf{FullAgeMax} = <%= @full_age_max %>;
 <% end -%>
 <% if @incr_keep_cnt -%>
 $Conf{IncrKeepCnt} = <%= @incr_keep_cnt %>;
 <% end -%>
 <% if @incr_age_max -%>
-$Conf{IncrAgeMax}     = <%= @incr_age_max %>;
+$Conf{IncrAgeMax} = <%= @incr_age_max %>;
 <% end -%>
 <% if @incr_fill -%>
 $Conf{IncrFill} = <%= @real_incr_fill %>;
