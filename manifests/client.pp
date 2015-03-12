@@ -214,6 +214,7 @@ class backuppc::client (
   $full_age_max          = false,
   $incr_period           = false,
   $incr_keep_cnt         = false,
+  $incr_keep_cnt_min     = false,
   $incr_age_max          = false,
   $incr_levels           = [],
   $incr_fill             = false,
