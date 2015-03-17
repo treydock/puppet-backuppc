@@ -14,6 +14,12 @@ describe 'backuppc::client', :type => :class do
     let(:params) {{ :backuppc_hostname => 'backuppc.test.com' }}
     it { should create_class('backuppc::client') }
     it { should contain_class('backuppc::params') }
+
+    context 'ensure => absent' do
+      let(:params) {{ :ensure => 'absent', :backuppc_hostname => 'backuppc.test.com' }}
+      it { should create_class('backuppc::client') }
+      it { should contain_class('backuppc::params') }
+    end
   end
 
   context "On RedHat" do
@@ -21,5 +27,11 @@ describe 'backuppc::client', :type => :class do
     let(:params) {{ :backuppc_hostname => 'backuppc.test.com' }}
     it { should create_class('backuppc::client') }
     it { should contain_class('backuppc::params') }
+
+    context 'ensure => absent' do
+      let(:params) {{ :ensure => 'absent', :backuppc_hostname => 'backuppc.test.com' }}
+      it { should create_class('backuppc::client') }
+      it { should contain_class('backuppc::params') }
+    end
   end
 end

@@ -264,8 +264,19 @@ class backuppc::client (
   $hosts_file_more_users = '',
 ) inherits backuppc::params {
 
-  validate_re($ensure, '^(present|absent)$',
-  'ensure parameter must have a value of: present or absent')
+  case $ensure {
+    'present': {
+      $file_ensure      = 'file'
+      $directory_ensure = 'directory'
+    }
+    'absent': {
+      $file_ensure      = 'absent'
+      $directory_ensure = 'absent'
+    }
+    default: {
+      fail('ensure parameter must have a value of: present or absent')
+    }
+  }
 
   if empty($backuppc_hostname) {
     fail('Please provide the hostname of the node that hosts backuppc.')
@@ -304,7 +315,7 @@ class backuppc::client (
       $sudo_command_noexec = $backuppc::params::tar_path
     }
 
-    if $manage_sudo {
+    if $manage_sudo and $ensure == 'present' {
       package { 'sudo':
         ensure => installed,
         before => File['/etc/sudoers.d/backuppc'],
@@ -336,7 +347,7 @@ class backuppc::client (
 
     if ! empty($sudo_commands) {
       file { '/etc/sudoers.d/backuppc':
-        ensure  => $ensure,
+        ensure  => $file_ensure,
         owner   => 'root',
         group   => 'root',
         mode    => '0440',
@@ -349,7 +360,7 @@ class backuppc::client (
     }
 
     file { '/etc/sudoers.d/backuppc_noexec':
-      ensure  => $ensure,
+      ensure  => $file_ensure,
       owner   => 'root',
       group   => 'root',
       mode    => '0440',
@@ -381,21 +392,21 @@ class backuppc::client (
     }
 
     file { $system_home_directory:
-      ensure  => directory,
+      ensure  => $directory_ensure,
       owner   => $system_account,
       group   => $system_account,
       require => $require_user,
     }
 
     file { "${system_home_directory}/.ssh":
-      ensure  => directory,
+      ensure  => $directory_ensure,
       mode    => '0700',
       owner   => $system_account,
       group   => $system_account,
     }
 
     file { "${system_home_directory}/backuppc.sh":
-      ensure  => $ensure,
+      ensure  => $file_ensure,
       owner   => 'root',
       group   => 'root',
       mode    => '0755',
@@ -404,6 +415,7 @@ class backuppc::client (
     }
 
     Ssh_authorized_key <<| tag == "backuppc_${backuppc_hostname}" |>> {
+      ensure  => $ensure,
       user    => $system_account,
       require => File["${system_home_directory}/.ssh"]
     }
@@ -427,7 +439,7 @@ class backuppc::client (
   }
 
   @@file { "${backuppc::params::config_directory}/pc/${config_name}.pl":
-    ensure  => $ensure,
+    ensure  => $file_ensure,
     content => template("${module_name}/host.pl.erb"),
     owner   => 'backuppc',
     group   => $backuppc::params::group_apache,
