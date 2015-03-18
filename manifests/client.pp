@@ -369,6 +369,11 @@ class backuppc::client (
 
     if $manage_system_account {
       $require_user = User[$system_account]
+      if $ensure == 'present' {
+        $user_before = undef
+      } else {
+        $user_before = Group[$system_account]
+      }
 
       user { $system_account:
         ensure     => $ensure,
@@ -380,6 +385,7 @@ class backuppc::client (
         uid        => $system_account_uid,
         gid        => $system_account,
         password   => $system_account_password,
+        before     => $user_before,
       }
 
       group { $system_account:

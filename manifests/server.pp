@@ -481,6 +481,7 @@ class backuppc::server (
     require => File["${backuppc::params::config_directory}/pc"],
   }
   File_line <<| tag == "backuppc_hosts_${::fqdn}" |>> {
+    notify  => $notify_service,
     require => Package[$backuppc::params::package],
   }
 
