@@ -439,7 +439,7 @@ class backuppc::client (
   @@file_line { "backuppc_host_${config_name}":
     ensure  => $ensure,
     path    => $backuppc::params::hosts,
-    match   => "^${config_name}.*$",
+    match   => "^${config_name}\s.*$",
     line    => "${config_name} ${hosts_file_dhcp} ${hosts_file_user} ${hosts_file_more_users}\n",
     tag     => "backuppc_hosts_${backuppc_hostname}",
   }
