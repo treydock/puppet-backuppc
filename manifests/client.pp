@@ -409,8 +409,17 @@ class backuppc::client (
       mode    => '0700',
       owner   => $system_account,
       group   => $system_account,
+      seltype => 'ssh_home_t',
     }
-
+    
+    file { "${system_home_directory}/.ssh/authorized_keys":
+      ensure  => $file_ensure,
+      mode    => '0600',
+      owner   => $system_account,
+      group   => $system_account,
+      seltype => 'ssh_home_t',
+    }
+    
     file { "${system_home_directory}/backuppc.sh":
       ensure  => $file_ensure,
       owner   => 'root',
