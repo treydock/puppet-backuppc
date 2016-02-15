@@ -480,10 +480,14 @@ class backuppc::server (
     notify  => $notify_service,
     require => File["${backuppc::params::config_directory}/pc"],
   }
-  File_line <<| tag == "backuppc_hosts_${::fqdn}" |>> {
+  Augeas <<| tag == "backuppc_hosts_${::fqdn}" |>> {
     notify  => $notify_service,
     require => Package[$backuppc::params::package],
   }
+  #File_line <<| tag == "backuppc_hosts_${::fqdn}" |>> {
+  #  notify  => $notify_service,
+  #  require => Package[$backuppc::params::package],
+  #}
 
   # Ensure readable file permissions on
   # the known hosts file.

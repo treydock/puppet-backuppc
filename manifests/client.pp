@@ -445,13 +445,33 @@ class backuppc::client (
     }
   }
 
-  @@file_line { "backuppc_host_${config_name}":
-    ensure  => $ensure,
-    path    => $backuppc::params::hosts,
-    match   => "^${config_name}\s.*$",
-    line    => "${config_name} ${hosts_file_dhcp} ${hosts_file_user} ${hosts_file_more_users}\n",
-    tag     => "backuppc_hosts_${backuppc_hostname}",
+  if $ensure == 'present' {
+    @@augeas { "backuppc_host_${config_name}-create":
+      context => '/files/etc/backuppc/hosts',
+      changes => template("${module_name}/host-augeas-create.erb"),
+      lens    => 'BackupPCHosts.lns',
+      incl    => '/etc/backuppc/hosts',
+      onlyif  => "match *[host = '${config_name}'] size == 0",
+      before  => Augeas["backuppc_host_${config_name}-update"],
+      tag     => "backuppc_hosts_${backuppc_hostname}",
+    }
+    @@augeas { "backuppc_host_${config_name}-update":
+      context => '/files/etc/backuppc/hosts',
+      changes => template("${module_name}/host-augeas-update.erb"),
+      lens    => 'BackupPCHosts.lns',
+      incl    => '/etc/backuppc/hosts',
+      onlyif  => "match *[host = '${config_name}'] size > 0",
+      tag     => "backuppc_hosts_${backuppc_hostname}",
+    }
   }
+
+  #@@file_line { "backuppc_host_${config_name}":
+  #  ensure  => $ensure,
+  #  path    => $backuppc::params::hosts,
+  #  match   => "^${config_name}\s.*$",
+  #  line    => "${config_name} ${hosts_file_dhcp} ${hosts_file_user} ${hosts_file_more_users}\n",
+  #  tag     => "backuppc_hosts_${backuppc_hostname}",
+  #}
 
   @@file { "${backuppc::params::config_directory}/pc/${config_name}.pl":
     ensure  => $file_ensure,
