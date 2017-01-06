@@ -221,6 +221,7 @@ class backuppc::server (
   $apache_require_ssl         = false,
   $backuppc_password          = '',
   $backuppc_username          = 'backuppc',
+  $manage_topdir              = true,
   $topdir                     = $backuppc::params::topdir,
   $cgi_admin_user_group       = 'backuppc',
   $cgi_admin_users            = ['backuppc'],
@@ -228,7 +229,7 @@ class backuppc::server (
   $manage_ssh_known_hosts     = true,
 ) inherits backuppc::params {
 
-  if empty($backuppc_password) {
+  if $apache_configuration and empty($backuppc_password) {
     fail('Please provide a password for the backuppc user. This is used to login to the web based administration site.')
   }
   validate_bool($service_enable)
@@ -236,6 +237,7 @@ class backuppc::server (
   validate_bool($checksum_seed)
   validate_bool($rsync_cmd_with_sudo)
   validate_bool($apache_require_ssl)
+  validate_bool($manage_topdir)
   validate_bool($manage_ssh_known_hosts)
 
   validate_re($max_backups, '^[1-9]([0-9]*)?$',
@@ -399,12 +401,21 @@ class backuppc::server (
     require => File[$backuppc::params::config_directory],
   }
 
-#  file { [$topdir, "${topdir}/.ssh"]:
-#    ensure  => 'directory',
-#    owner   => 'backuppc',
-#    group   => 'backuppc',
-#    mode    => '0644',
-#  }
+  if $manage_topdir {
+    file { $topdir:
+      ensure  => 'directory',
+      owner   => 'backuppc',
+      group   => 'root',
+      mode    => '0750',
+    }
+  }
+
+  file { "${topdir}/.ssh":
+    ensure  => 'directory',
+    owner   => 'backuppc',
+    group   => 'backuppc',
+    mode    => '0700',
+  }
 
   # Workaround for client exported resources that are
   # on a different osfamily. Maintain a symlink to alternative
@@ -435,7 +446,7 @@ class backuppc::server (
     path    => ['/usr/bin','/bin'],
     require => [
         Package[$backuppc::params::package],
-#        File["${topdir}/.ssh"],
+        File["${topdir}/.ssh"],
     ],
   }
 
