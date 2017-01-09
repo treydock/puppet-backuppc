@@ -307,8 +307,10 @@ class backuppc::client (
 
     if $xfer_method == 'rsync' {
       if $manage_rsync {
-        package { 'rsync':
-          ensure => installed,
+        if ! defined(Package['rsync']) {
+          package { 'rsync':
+            ensure => installed,
+          }
         }
       }
       $sudo_command_noexec = '/usr/bin/rsync'
