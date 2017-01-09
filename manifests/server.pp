@@ -227,6 +227,10 @@ class backuppc::server (
   $cgi_admin_users            = ['backuppc'],
   $cgi_url                    = "http://${::fqdn}/backuppc",
   $manage_ssh_known_hosts     = true,
+  $manage_user                = false,
+  $user_forcelocal            = undef,
+  $user_uid                   = undef,
+  $user_gid                   = undef,
 ) inherits backuppc::params {
 
   if $apache_configuration and empty($backuppc_password) {
@@ -239,6 +243,7 @@ class backuppc::server (
   validate_bool($apache_require_ssl)
   validate_bool($manage_topdir)
   validate_bool($manage_ssh_known_hosts)
+  validate_bool($manage_user)
 
   validate_re("$max_backups", '^[1-9]([0-9]*)?$',
   'Max_backups parameter should be a number')
@@ -355,6 +360,37 @@ class backuppc::server (
     }
   }
 
+  if $manage_user {
+    $require_user = User['backuppc']
+    if $ensure == 'present' {
+      $user_before = Package[$backuppc::params::package]
+    } else {
+      $user_before = [Package[$backuppc::params::package], Group['backuppc']]
+    }
+
+    user { 'backuppc':
+      ensure     => $ensure,
+      home       => $topdir,
+      managehome => true,
+      shell      => '/sbin/nologin',
+      comment    => 'BackupPC User',
+      system     => true,
+      uid        => $user_uid,
+      gid        => 'backuppc',
+      forcelocal => $user_forcelocal,
+      before     => $user_before,
+    }
+
+    group { 'backuppc':
+      ensure     => $ensure,
+      system     => true,
+      gid        => $user_gid,
+      forcelocal => $user_forcelocal,
+    }
+  } else {
+    $require_user = undef
+  }
+
   # BackupPC package and service configuration
   package { $backuppc::params::package:
     ensure  => $package_ensure,
@@ -407,6 +443,7 @@ class backuppc::server (
       owner   => 'backuppc',
       group   => 'root',
       mode    => '0750',
+      require => $require_user,
     }
   }
 
@@ -415,6 +452,7 @@ class backuppc::server (
     owner   => 'backuppc',
     group   => 'backuppc',
     mode    => '0700',
+    require => $require_user,
   }
 
   # Workaround for client exported resources that are

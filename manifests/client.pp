@@ -204,6 +204,7 @@ class backuppc::client (
   $system_home_directory = '/var/backups',
   $system_account_uid    = undef,
   $system_account_gid    = undef,
+  $system_account_forcelocal = undef,
   $system_additional_commands = [],
   $system_additional_commands_noexec = [],
   $manage_sudo           = false,
@@ -385,13 +386,15 @@ class backuppc::client (
         uid        => $system_account_uid,
         gid        => $system_account,
         password   => $system_account_password,
+        forcelocal => $system_account_forcelocal,
         before     => $user_before,
       }
 
       group { $system_account:
-        ensure  => $ensure,
-        system  => true,
-        gid     => $system_account_gid,
+        ensure     => $ensure,
+        system     => true,
+        gid        => $system_account_gid,
+        forcelocal => $system_account_forcelocal,
       }
     } else {
       $require_user = undef
