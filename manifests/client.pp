@@ -263,6 +263,7 @@ class backuppc::client (
   $hosts_file_dhcp       = 0,
   $hosts_file_user       = 'backuppc',
   $hosts_file_more_users = '',
+  $export_sshkey         = true,
 ) inherits backuppc::params {
 
   case $ensure {
@@ -439,7 +440,7 @@ class backuppc::client (
     }
   }
 
-  if $::fqdn != $backuppc_hostname {
+  if $export_sshkey and $::fqdn != $backuppc_hostname {
     @@sshkey { $::fqdn:
       ensure => $ensure,
       type   => 'ssh-rsa',
