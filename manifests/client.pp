@@ -306,7 +306,7 @@ class backuppc::client (
     validate_absolute_path($system_home_directory)
 
     if $xfer_method == 'rsync' {
-      if $manage_rsync {
+      if $manage_rsync and $ensure == 'present' {
         if ! defined(Package['rsync']) {
           package { 'rsync':
             ensure => installed,
