@@ -296,7 +296,7 @@ class backuppc::server (
   validate_re("$archive_info_keep_cnt", '^[1-9]([0-9]*)?$',
   'Restore_info_keep_cnt parameter should be a number')
 
-  validate_re("$blackout_good_cnt", '^[1-9]([0-9]*)?$',
+  validate_re("$blackout_good_cnt", '^[0-9]([0-9]*)?$',
   'Blackout_good_cnt parameter should be a number')
 
   validate_re("$email_notify_min_days", '^[0-9]([0-9]*)?(\.[0-9]{1,2})?$',
