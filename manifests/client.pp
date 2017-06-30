@@ -340,6 +340,8 @@ class backuppc::client (
     if ! empty($system_additional_commands) {
       $additional_sudo_commands = join($system_additional_commands, ', ')
       $sudo_commands = "${additional_sudo_commands}"
+    } else {
+      $sudo_commands = ''
     }
 
     if ! empty($system_additional_commands_noexec) {
