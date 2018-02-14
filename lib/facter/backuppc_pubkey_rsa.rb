@@ -1,11 +1,12 @@
 Facter.add('backuppc_pubkey_rsa') do
+  confine :osfamily => ['RedHat', 'Debian']
+
   setcode do
-    os_family   = Facter.value(:osfamily)
-    sshkey_path ||= case Facter.value(:osfamily)
+    case Facter.value(:osfamily)
     when 'RedHat'
-      '/var/lib/BackupPC/.ssh/id_rsa.pub'
+      sshkey_path = '/var/lib/BackupPC/.ssh/id_rsa.pub'
     when 'Debian'
-      '/var/lib/backuppc/.ssh/id_rsa.pub'
+      sshkey_path = '/var/lib/backuppc/.ssh/id_rsa.pub'
     end
     
     if File.exists?(sshkey_path)
