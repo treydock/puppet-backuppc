@@ -8,9 +8,11 @@ Facter.add('backuppc_pubkey_rsa') do
     when 'Debian'
       sshkey_path = '/var/lib/backuppc/.ssh/id_rsa.pub'
     end
-    
+
     if File.exists?(sshkey_path)
-      File.open(sshkey_path).read.split(' ')[1]
+      File.read(sshkey_path).split(' ')[1]
+    else
+      nil
     end
   end
 end

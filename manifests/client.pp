@@ -194,147 +194,99 @@
 # Scott Barr <gsbarr@gmail.com>
 #
 class backuppc::client (
-  $ensure                = 'present',
-  $config_name           = $::fqdn,
-  $client_name_alias     = undef,
-  $backuppc_hostname     = '',
-  $manage_system_account = true,
-  $system_account        = 'backup',
-  $system_account_password = $backuppc::params::client_system_account_password,
-  $system_home_directory = '/var/backups',
-  $system_account_uid    = undef,
-  $system_account_gid    = undef,
-  $system_account_forcelocal = undef,
-  $system_additional_commands = [],
-  $system_additional_commands_noexec = [],
-  $manage_sudo           = false,
-  $manage_rsync          = true,
-  $full_period           = false,
-  $full_keep_cnt         = false,
-  $full_keep_cnt_min     = false,
-  $full_age_max          = false,
-  $incr_period           = false,
-  $incr_keep_cnt         = false,
-  $incr_keep_cnt_min     = false,
-  $incr_age_max          = false,
-  $incr_levels           = [],
-  $incr_fill             = false,
-  $partial_age_max       = false,
-  $blackout_bad_ping_limit = false,
-  $ping_max_msec         = false,
-  $blackout_good_cnt     = false,
-  $backups_disable       = false,
-  $xfer_method           = 'rsync',
-  $xfer_loglevel         = 1,
-  $smb_share_name        = false,
-  $smb_share_username    = false,
-  $smb_share_passwd      = false,
-  $smb_client_full_cmd   = false,
-  $smb_client_incr_cmd   = false,
-  $smb_client_restore_cmd = false,
-  $tar_share_name        = false,
-  $tar_client_cmd        = false,
-  $tar_full_args         = false,
-  $tar_incr_args         = false,
-  $tar_client_restore_cmd = false,
-  $rsync_client_cmd      = false,
-  $rsync_client_restore_cmd = false,
-  $rsync_share_name      = false,
-  $rsyncd_client_port    = false,
-  $rsyncd_user_name      = false,
-  $rsyncd_passwd         = false,
-  $rsyncd_auth_required  = false,
-  $rsync_csum_cache_verify_prob = false,
-  $rsync_args            = [],
-  $rsync_restore_args    = [],
-  $backup_files_only     = [],
-  $backup_files_exclude  = [],
-  $dump_pre_user_cmd     = false,
-  $dump_post_user_cmd    = false,
-  $dump_pre_share_cmd    = false,
-  $dump_post_share_cmd   = false,
-  $restore_pre_user_cmd  = false,
-  $restore_post_user_cmd = false,
-  $user_cmd_check_status = true,
-  $email_notify_min_days = false,
-  $email_from_user_name  = false,
-  $email_admin_user_name = false,
-  $email_notify_old_backup_days = false,
-  $hosts_file_dhcp       = 0,
-  $hosts_file_user       = 'backuppc',
-  $hosts_file_more_users = '',
-  $export_sshkey         = true,
-) inherits backuppc::params {
+  Stdlib::Host $backuppc_hostname,
+  Enum['present','absent'] $ensure = 'present',
+  String $config_name = $facts['networking']['fqdn'],
+  Boolean $manage_system_account = true,
+  String $system_account = 'backup',
+  Stdlib::Absolutepath $system_account_home_directory = '/var/backups',
+  Optional[Integer] $system_account_uid = undef,
+  Optional[Integer] $system_account_gid = undef,
+  Array $system_additional_commands = [],
+  Array $system_additional_commands_noexec = [],
+  Boolean $manage_sudo = false,
+  Boolean $manage_rsync = true,
+  Stdlib::Absolutepath $rsync_path = '/usr/bin/rsync',
+  Stdlib::Absolutepath $tar_path = '/bin/gtar',
+  Optional[String] $client_name_alias = undef,
+  String $xfer_method = 'rsync',
+  Integer $xfer_loglevel = 1,
+  Optional[Boolean] $backups_disable = undef,
+  Optional[Variant[Integer, Float]] $full_period = undef,
+  Optional[Variant[Integer, Float]] $incr_period = undef,
+  Optional[Array[Integer]] $full_keep_cnt = undef,
+  Optional[Integer] $full_keep_cnt_min = undef,
+  Optional[Integer] $full_age_max = undef,
+  Optional[Integer] $incr_keep_cnt = undef,
+  Optional[Integer] $incr_keep_cnt_min = undef,
+  Optional[Integer] $incr_age_max = undef,
+  Optional[Integer] $blackout_bad_ping_limit = undef,
+  Optional[Integer] $ping_max_msec = undef,
+  Optional[Integer] $blackout_good_cnt = undef,
+  Optional[Variant[Hash,Array,String]] $backup_files_only = undef,
+  Optional[Variant[Hash,Array,String]] $backup_files_exclude  = undef,
+  Optional[String] $smb_share_name = undef,
+  Optional[String] $smb_share_username    = undef,
+  Optional[String] $smb_share_passwd      = undef,
+  Optional[String] $smb_client_full_cmd   = undef,
+  Optional[String] $smb_client_incr_cmd   = undef,
+  Optional[String] $smb_client_restore_cmd = undef,
+  Optional[Variant[Array, String]] $tar_share_name = undef,
+  Optional[String] $tar_client_cmd = undef,
+  Optional[String] $tar_full_args = undef,
+  Optional[String] $tar_incr_args = undef,
+  Optional[String] $tar_client_restore_cmd = undef,
+  Optional[String] $rsync_client_path = undef,
+  Optional[String] $rsync_ssh_args = undef,
+  Optional[Array] $rsync_args = undef,
+  Optional[Array] $rsync_args_extra = undef,
+  Optional[Array] $rsync_restore_args = undef,
+  Optional[Array] $rsync_restore_args_extra = undef,
+  Optional[Variant[Array, String]] $rsync_share_name = undef,
+  Optional[Integer] $rsyncd_client_port = undef,
+  Optional[String] $rsyncd_user_name = undef,
+  Optional[String] $rsyncd_passwd = undef,
+  Optional[String] $dump_pre_user_cmd = undef,
+  Optional[String] $dump_post_user_cmd = undef,
+  Optional[String] $dump_pre_share_cmd = undef,
+  Optional[String] $dump_post_share_cmd = undef,
+  Optional[String] $restore_pre_user_cmd = undef,
+  Optional[String] $restore_post_user_cmd = undef,
+  Optional[Boolean] $user_cmd_check_status = undef,
+  Optional[Variant[Integer, Float]] $email_notify_min_days = undef,
+  Optional[String] $email_from_user_name  = undef,
+  Optional[String] $email_admin_user_name = undef,
+  Optional[Integer] $email_notify_old_backup_days = undef,
+  Boolean $hosts_file_dhcp = false,
+  String $hosts_file_user = 'backuppc',
+  Array $hosts_file_more_users = [],
+  Boolean $export_sshkey = true,
+) {
 
   case $ensure {
-    'present': {
-      $file_ensure      = 'file'
-      $directory_ensure = 'directory'
-    }
     'absent': {
-      $file_ensure      = 'absent'
+      $file_ensure = 'absent'
       $directory_ensure = 'absent'
     }
     default: {
-      fail('ensure parameter must have a value of: present or absent')
+      $file_ensure = 'file'
+      $directory_ensure = 'directory'
     }
   }
 
-  if empty($backuppc_hostname) {
-    fail('Please provide the hostname of the node that hosts backuppc.')
-  }
-
-  validate_bool($manage_system_account)
-
-  validate_re($xfer_method, '^(smb|rsync|rsyncd|tar)$',
-  'Xfer_method parameter must have value of: smb, rsync, rsyncd or tar')
-
-  validate_re("$xfer_loglevel", '^[0-2]$',
-  'Xfer_loglevel parameter must be a 0, 1 or 2')
-
-  $real_incr_fill = bool2num($incr_fill)
-  $real_backups_disable = bool2num($backups_disable)
-  $real_rsyncd_auth_required = bool2num($rsyncd_auth_required)
-  $real_user_cmd_check_status = bool2num($user_cmd_check_status)
-
-  # With these xfer_methods we require sudo to grant access
-  # from the backuppc server to this client. It may be managed
-  # elsewhere so we allow it to be overridden with the manage_sudo
-  # parameter.
-  if $xfer_method in ['rsync', 'tar'] and ! empty($system_account)
-  {
-    validate_absolute_path($system_home_directory)
-
+  if $xfer_method in ['rsync', 'tar'] {
     if $xfer_method == 'rsync' {
       if $manage_rsync and $ensure == 'present' {
-        if ! defined(Package['rsync']) {
-          package { 'rsync':
-            ensure => installed,
-          }
-        }
+        ensure_packages(['rsync'])
       }
-      $sudo_command_noexec = '/usr/bin/rsync'
+      $sudo_command_noexec = $rsync_path
     }
     else {
-      $sudo_command_noexec = $backuppc::params::tar_path
+      $sudo_command_noexec = $tar_path
     }
 
     if $manage_sudo and $ensure == 'present' {
-      package { 'sudo':
-        ensure => installed,
-        before => File['/etc/sudoers.d/backuppc'],
-      }
-      file { '/etc/sudoers.d/':
-        ensure  => directory,
-        purge   => false,
-        require => Package['sudo'],
-      }
-      file_line { 'sudo_includedir':
-        ensure  => present,
-        path    => '/etc/sudoers',
-        line    => '#includedir /etc/sudoers.d',
-        require => Package['sudo'],
-      }
+      include sudo
     }
 
     if ! empty($system_additional_commands) {
@@ -352,29 +304,28 @@ class backuppc::client (
     }
 
     if ! empty($sudo_commands) {
-      file { '/etc/sudoers.d/backuppc':
-        ensure  => $file_ensure,
-        owner   => 'root',
-        group   => 'root',
-        mode    => '0440',
-        content => "${system_account} ALL=(ALL:ALL) NOPASSWD: ${sudo_commands}\nDefaults:${system_account} !requiretty\n",
-      }
+      $sudo_ensure = $ensure
     } else {
-      file { '/etc/sudoers.d/backuppc':
-        ensure  => 'absent',
-      }
+      $sudo_ensure = 'absent'
     }
 
-    file { '/etc/sudoers.d/backuppc_noexec':
-      ensure  => $file_ensure,
-      owner   => 'root',
-      group   => 'root',
-      mode    => '0440',
-      content => "${system_account} ALL=(ALL:ALL) NOEXEC:NOPASSWD: ${sudo_commands_noexec}\nDefaults:${system_account} !requiretty\n",
+    sudo::conf { 'backuppc':
+      ensure  => $sudo_ensure,
+      content => [
+        "Defaults:${system_account} !requiretty",
+        "${system_account} ALL=(ALL:ALL) NOPASSWD: ${sudo_commands}",
+      ],
+    }
+
+    sudo::conf { 'backuppc_noexec':
+      ensure  => $ensure,
+      content => [
+        "Defaults:${system_account} !requiretty",
+        "${system_account} ALL=(ALL:ALL) NOEXEC:NOPASSWD: ${sudo_commands_noexec}",
+      ],
     }
 
     if $manage_system_account {
-      $require_user = User[$system_account]
       if $ensure == 'present' {
         $user_before = undef
       } else {
@@ -383,15 +334,14 @@ class backuppc::client (
 
       user { $system_account:
         ensure     => $ensure,
-        home       => $system_home_directory,
+        home       => $system_account_home_directory,
         managehome => true,
         shell      => '/bin/bash',
         comment    => 'BackupPC',
         system     => true,
         uid        => $system_account_uid,
         gid        => $system_account,
-        password   => $system_account_password,
-        forcelocal => $system_account_forcelocal,
+        forcelocal => true,
         before     => $user_before,
       }
 
@@ -399,20 +349,17 @@ class backuppc::client (
         ensure     => $ensure,
         system     => true,
         gid        => $system_account_gid,
-        forcelocal => $system_account_forcelocal,
+        forcelocal => true,
       }
-    } else {
-      $require_user = undef
     }
 
-    file { $system_home_directory:
+    file { $system_account_home_directory:
       ensure  => $directory_ensure,
       owner   => $system_account,
       group   => $system_account,
-      require => $require_user,
     }
 
-    file { "${system_home_directory}/.ssh":
+    file { "${system_account_home_directory}/.ssh":
       ensure  => $directory_ensure,
       mode    => '0700',
       owner   => $system_account,
@@ -420,7 +367,7 @@ class backuppc::client (
       seltype => 'ssh_home_t',
     }
     
-    file { "${system_home_directory}/.ssh/authorized_keys":
+    file { "${system_account_home_directory}/.ssh/authorized_keys":
       ensure  => $file_ensure,
       mode    => '0600',
       owner   => $system_account,
@@ -428,64 +375,61 @@ class backuppc::client (
       seltype => 'ssh_home_t',
     }
     
-    file { "${system_home_directory}/backuppc.sh":
+    file { "${system_account_home_directory}/backuppc.sh":
       ensure  => $file_ensure,
       owner   => 'root',
       group   => 'root',
       mode    => '0755',
       content => template('backuppc/client/backuppc.sh.erb'),
-      require => $require_user,
     }
 
     Ssh_authorized_key <<| tag == "backuppc_${backuppc_hostname}" |>> {
       ensure  => $ensure,
       user    => $system_account,
-      require => File["${system_home_directory}/.ssh"]
+      options => [
+        "command=\"${system_account_home_directory}/backuppc.sh\"",
+        'no-agent-forwarding',
+        'no-port-forwarding',
+        'no-pty',
+        'no-X11-forwarding',
+      ],
+      require => File["${system_account_home_directory}/.ssh"]
     }
   }
 
-  if $export_sshkey and $::fqdn != $backuppc_hostname {
-    @@sshkey { $::fqdn:
+  if $export_sshkey and $facts['networking']['fqdn'] != $backuppc_hostname {
+    @@sshkey { $facts['networking']['fqdn']:
       ensure => $ensure,
       type   => 'ssh-rsa',
-      key    => $::sshrsakey,
+      key    => $facts['ssh']['rsa']['key'],
       tag    => "backuppc_sshkeys_${backuppc_hostname}",
     }
   }
 
   if $ensure == 'present' {
     @@augeas { "backuppc_host_${config_name}-create":
-      context => '/files/etc/backuppc/hosts',
+      context => '/files/etc/BackupPC/hosts',
       changes => template("${module_name}/host-augeas-create.erb"),
       lens    => 'BackupPCHosts.lns',
-      incl    => '/etc/backuppc/hosts',
+      incl    => '/etc/BackupPC/hosts',
       onlyif  => "match *[host = '${config_name}'] size == 0",
       before  => Augeas["backuppc_host_${config_name}-update"],
       tag     => "backuppc_hosts_${backuppc_hostname}",
     }
     @@augeas { "backuppc_host_${config_name}-update":
-      context => '/files/etc/backuppc/hosts',
+      context => '/files/etc/BackupPC/hosts',
       changes => template("${module_name}/host-augeas-update.erb"),
       lens    => 'BackupPCHosts.lns',
-      incl    => '/etc/backuppc/hosts',
+      incl    => '/etc/BackupPC/hosts',
       onlyif  => "match *[host = '${config_name}'] size > 0",
       tag     => "backuppc_hosts_${backuppc_hostname}",
     }
   }
 
-  #@@file_line { "backuppc_host_${config_name}":
-  #  ensure  => $ensure,
-  #  path    => $backuppc::params::hosts,
-  #  match   => "^${config_name}\s.*$",
-  #  line    => "${config_name} ${hosts_file_dhcp} ${hosts_file_user} ${hosts_file_more_users}\n",
-  #  tag     => "backuppc_hosts_${backuppc_hostname}",
-  #}
-
-  @@file { "${backuppc::params::config_directory}/pc/${config_name}.pl":
+  @@file { "/etc/BackupPC/pc/${config_name}.pl":
     ensure  => $file_ensure,
     content => template("${module_name}/host.pl.erb"),
     owner   => 'backuppc',
-    group   => $backuppc::params::group_apache,
     mode    => '0640',
     tag     => "backuppc_config_${backuppc_hostname}"
   }

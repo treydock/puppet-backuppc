@@ -172,382 +172,252 @@
 # Scott Barr <gsbarr@gmail.com>
 #
 class backuppc::server (
-  $ensure                     = 'present',
-  $service_enable             = true,
-  $replace_config             = true,
-  $wakeup_schedule            = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],
-  $max_backups                = 4,
-  $max_user_backups           = 4,
-  $max_pending_cmds           = 15,
-  $max_backup_pc_nightly_jobs = 2,
-  $backup_pc_nightly_period   = 1,
-  $max_old_log_files          = 14,
-  $df_max_usage_pct           = 95,
-  $trash_clean_sleep_sec      = 300,
-  $dhcp_address_ranges        = [],
-  $full_period                = '6.97',
-  $full_keep_cnt              = 1,
-  $full_age_max               = 90,
-  $incr_period                = '0.97',
-  $incr_keep_cnt              = 6,
-  $incr_age_max               = 30,
-  $incr_levels                = [1],
-  $incr_fill                  = false,
-  $partial_age_max            = 3,
-  $restore_info_keep_cnt      = 10,
-  $archive_info_keep_cnt      = 10,
-  $blackout_good_cnt          = 7,
-  $blackout_periods           = [ { hourBegin =>  7.0,
-                                    hourEnd   => 19.5,
-                                    weekDays  => [1, 2, 3, 4, 5],
-                                }, ],
-  $blackout_zero_files_is_fatal = true,
-  $checksum_seed              = false,
-  $rsync_cmd_default_user     = 'root',
-  $rsync_cmd_with_sudo        = false,
-  $rsync_args                 = [],
-  $rsync_args_extra           = [],
-  $rsync_restore_args         = [],
-  $compress_level             = '3',
-  $email_notify_min_days      = 2.5,
-  $email_from_user_name       = 'backuppc',
-  $email_admin_user_name      = 'backuppc',
-  $email_user_dest_domain     = $::domain,
-  $email_notify_old_backup_days = 7,
-  $email_headers              = { 'MIME-Version' => 1.0,
-                                  'Content-Type' => 'text/plain; charset="iso-8859-1"', },
-  $apache_configuration       = true,
-  $apache_allow_from          = 'all',
-  $apache_require_ssl         = false,
-  $backuppc_password          = '',
-  $backuppc_username          = 'backuppc',
-  $manage_topdir              = true,
-  $topdir                     = $backuppc::params::topdir,
-  $cgi_admin_user_group       = 'backuppc',
-  $cgi_admin_users            = ['backuppc'],
-  $cgi_url                    = "http://${::fqdn}/backuppc",
-  $manage_ssh_known_hosts     = true,
-  $manage_user                = false,
-  $user_forcelocal            = undef,
-  $user_uid                   = undef,
-  $user_gid                   = undef,
-) inherits backuppc::params {
-
-  if $apache_configuration and empty($backuppc_password) {
-    fail('Please provide a password for the backuppc user. This is used to login to the web based administration site.')
-  }
-  validate_bool($service_enable)
-  validate_bool($replace_config)
-  validate_bool($checksum_seed)
-  validate_bool($rsync_cmd_with_sudo)
-  validate_bool($apache_require_ssl)
-  validate_bool($manage_topdir)
-  validate_bool($manage_ssh_known_hosts)
-  validate_bool($manage_user)
-
-  validate_re("$max_backups", '^[1-9]([0-9]*)?$',
-  'Max_backups parameter should be a number')
-
-  validate_re("$max_user_backups", '^[1-9]([0-9]*)?$',
-  'Max_user_backups parameter should be a number')
-
-  validate_re("$max_pending_cmds", '^[1-9]([0-9]*)?$',
-  'Max_pending_cmds parameter should be a number')
-
-  validate_re("$max_backup_pc_nightly_jobs", '^[1-9]([0-9]*)?$',
-  'Max_backup_pc_nightly_jobs parameter should be a number')
-
-  validate_re("$df_max_usage_pct", '^[1-9]([0-9]*)?$',
-  'Df_max_usage_pct parameter should be a number')
-
-  validate_re("$max_old_log_files", '^[1-9]([0-9]*)?$',
-  'Max_old_log_files parameter should be a number')
-
-  validate_re("$backup_pc_nightly_period", '^[1-9]([0-9]*)?$',
-  'Backup_pc_nightly_period parameter should be a number')
-
-  validate_re("$trash_clean_sleep_sec",  '^[1-9]([0-9]*)?$',
-  'Trash_clean_sleep_sec parameter should be a number')
-
-  validate_re($full_period, '^[0-9]([0-9]*)?(\.[0-9]{1,2})?$',
-  'Full_period parameter should be a number')
-
-  validate_re($incr_period, '^[0-9]([0-9]*)?(\.[0-9]{1,2})?$',
-  'Incr_period parameter should be a number')
-
-  validate_re("$full_keep_cnt", '^[1-9]([0-9]*)?$',
-  'Full_keep_cnt parameter should be a number')
-
-  validate_re("$full_age_max", '^[1-9]([0-9]*)?$',
-  'Full_age_max parameter should be a number')
-
-  validate_re("$incr_keep_cnt", '^[1-9]([0-9]*)?$',
-  'Incr_keep_cnt parameter should be a number')
-
-  validate_re("$incr_age_max", '^[1-9]([0-9]*)?$',
-  'Incr_age_max parameter should be a number')
-
-  validate_re("$partial_age_max", '^[1-9]([0-9]*)?$',
-  'Partial_age_max parameter should be a number')
-
-  validate_re("$restore_info_keep_cnt", '^[1-9]([0-9]*)?$',
-  'Restore_info_keep_cnt parameter should be a number')
-
-  validate_re("$archive_info_keep_cnt", '^[1-9]([0-9]*)?$',
-  'Restore_info_keep_cnt parameter should be a number')
-
-  validate_re("$blackout_good_cnt", '^[0-9]([0-9]*)?$',
-  'Blackout_good_cnt parameter should be a number')
-
-  validate_re("$email_notify_min_days", '^[0-9]([0-9]*)?(\.[0-9]{1,2})?$',
-  'Email_notify_min_days parameter should be a number')
-
-  validate_re("$email_notify_old_backup_days", '^[1-9]([0-9]*)?$',
-  'Blackout_good_cnt parameter should be a number')
-
-  validate_array($wakeup_schedule)
-  validate_array($dhcp_address_ranges)
-  validate_array($incr_levels)
-  validate_array($blackout_periods)
-  validate_array($rsync_args)
-  validate_array($rsync_args_extra)
-  validate_array($rsync_restore_args)
-  validate_array($cgi_admin_users)
-
-  validate_hash($email_headers)
-
-  validate_string($apache_allow_from)
-  validate_string($cgi_admin_user_group)
-  validate_string($cgi_url)
-
-  $real_incr_fill = bool2num($incr_fill)
-  $real_bzfif     = bool2num($blackout_zero_files_is_fatal)
-
-  case $ensure {
-    'present': {
-      $package_ensure   = 'installed'
-      $file_ensure      = 'file'
-      $link_ensure      = 'link'
-      $directory_ensure = 'directory'
+  String $package_name = 'BackupPC',
+  Boolean $manage_repo = true,
+  String $service_name = 'backuppc',
+  Stdlib::Absolutepath $config_dir = '/etc/BackupPC',
+  Boolean $replace_config = true,
+  Boolean $manage_topdir = true,
+  Stdlib::Absolutepath $topdir = '/var/lib/BackupPC',
+  Stdlib::Absolutepath $install_dir = '/usr/share/BackupPC',
+  Stdlib::Absolutepath $log_dir = '/var/log/BackupPC',
+  Stdlib::Absolutepath $run_dir = '/var/run/BackupPC',
+  Stdlib::Absolutepath $df_path = '/usr/bin/df',
+  Stdlib::Absolutepath $cat_path = '/usr/bin/cat',
+  Stdlib::Absolutepath $par_path = '/usr/bin/par2',
+  Stdlib::Absolutepath $gzip_path = '/usr/bin/gzip',
+  Stdlib::Absolutepath $bzip2_path = '/usr/bin/bzip2',
+  Stdlib::Absolutepath $rsync_path = '/usr/bin/rsync',
+  Stdlib::Absolutepath $tar_path = '/bin/gtar',
+  Stdlib::Absolutepath $rsync_bpc_path = '/usr/bin/rsync_bpc',
+  Stdlib::Absolutepath $ping_path = '/usr/bin/ping',
+  Stdlib::Absolutepath $ping6_path = '/usr/sbin/ping6',
+  Stdlib::Absolutepath $cgi_dir = '/usr/libexec/BackupPC',
+  Stdlib::Absolutepath $cgi_image_dir = '/usr/share/BackupPC/html',
+  Stdlib::Absolutepath $cgi_image_dir_url  = '/BackupPC/images',
+  String $apache_group = 'apache',
+  Stdlib::Fqdn $server_host = $facts['networking']['fqdn'],
+  Array[Integer]$wakeup_schedule = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],
+  Boolean $pool_v3_enabled = false,
+  Integer $max_backups = 4,
+  Integer $max_user_backups = 4,
+  Integer $max_pending_cmds = 15,
+  Integer $max_backup_pc_nightly_jobs = 2,
+  Integer $backup_pc_nightly_period = 1,
+  Integer $pool_size_nightly_update_period = 16,
+  Integer $pool_nightly_digest_check_percent = 1,
+  Integer $ref_cnt_fsck = 1,
+  Integer $max_old_log_files = 14,
+  Integer $df_max_usage_pct = 95,
+  Integer $df_max_inode_usage_pct = 95,
+  Array[Backuppc::DHCPAddressRange] $dhcp_address_ranges = [],
+  Variant[Integer, Float] $full_period = 6.97,
+  Variant[Integer, Float] $incr_period = 0.97,
+  Integer $fill_cycle = 0,
+  Array[Integer] $full_keep_cnt = [1],
+  Integer $full_age_max = 180,
+  Integer $incr_keep_cnt = 6,
+  Integer $incr_age_max = 30,
+  Integer $restore_info_keep_cnt = 10,
+  Integer $archive_info_keep_cnt = 10,
+  Integer $blackout_good_cnt = 7,
+  Array[Backuppc::BlackoutPeriod] $blackout_periods = [ 
+    { hour_begin =>  7.0,
+      hour_end   => 19.5,
+      week_days  => [1, 2, 3, 4, 5],
     }
-    'absent': {
-      $package_ensure   = 'absent'
-      $file_ensure      = 'absent'
-      $link_ensure      = 'absent'
-      $directory_ensure = 'absent'
-    }
-    default: {
-      fail("Class backuppc::server: ensure parameter must have a value of: present or absent")
-    }
+  ],
+  Boolean $blackout_zero_files_is_fatal = true,
+  String $rsync_cmd_default_user = 'root',
+  Boolean $rsync_cmd_with_sudo = false,
+  Array $rsync_args = [],
+  Array $rsync_args_extra = [],
+  Array $rsync_full_args_extra = ['--checksum'],
+  Array $rsync_incr_args_extra = [],
+  Array $rsync_restore_args = [],
+  Array $rsync_restore_args_extra = [],
+  Integer[1,9] $compress_level = 3,
+  Variant[Integer, Float] $email_notify_min_days = 2.5,
+  String $email_from_user_name = 'backuppc',
+  String $email_admin_user_name = 'backuppc',
+  Optional[String] $email_user_dest_domain = undef,
+  Variant[Integer, Float] $email_notify_old_backup_days = 7.0,
+  Hash $email_headers = {
+    'MIME-Version' => 1.0,
+    'Content-Type' => 'text/plain; charset="utf-8"',
+  },
+  Array $cgi_admin_user_group = [],
+  Array $cgi_admin_users = [],
+  Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl ] $cgi_url = "http://${facts['networking']['fqdn']}/backuppc",
+  Boolean $manage_user = true,
+  Optional[Integer] $user_uid = undef,
+  Stdlib::Absolutepath $user_shell = '/sbin/nologin',
+  Optional[Integer] $user_gid = undef,
+) {
+
+  $os_family = $facts['os']['family']
+  $os_major = $facts['os']['release']['major']
+  $os = "${os_family}-${os_major}"
+  $supported = ["RedHat-8", "Debian-11", "Debian-22.04"]
+  if ! ($os in $supported) {
+    fail("Unsupported OS family-major ${os}, only support ${supported.join(',')}")
   }
+  $config = "${config_dir}/config.pl"
 
-  if $service_enable {
-    $service_ensure = 'running'
-    $notify_service = Service[$backuppc::params::service]
-  } else {
-    $service_ensure = 'stopped'
-    $notify_service = undef
-  }
-
-  # Set up dependencies
-  Package[$backuppc::params::package] -> File[$backuppc::params::config] -> Service[$backuppc::params::service]
-
-  # Include preseeding for debian packages
-  if $::osfamily == 'Debian' {
-    file { '/var/cache/debconf/backuppc.seeds':
-      ensure  => $ensure,
-      source  => 'puppet:///modules/backuppc/backuppc.preseed',
+  if $manage_repo {
+    if $os_family == 'RedHat' {
+      include epel
+      Class['epel'] -> Package[$package_name]
     }
   }
 
   if $manage_user {
-    $require_user = User['backuppc']
-    if $ensure == 'present' {
-      $user_before = Package[$backuppc::params::package]
-    } else {
-      $user_before = [Package[$backuppc::params::package], Group['backuppc']]
-    }
-
     user { 'backuppc':
-      ensure     => $ensure,
+      ensure     => 'present',
       home       => $topdir,
-      managehome => true,
-      shell      => '/sbin/nologin',
+      managehome => false,
+      shell      => $user_shell,
       comment    => 'BackupPC User',
       system     => true,
       uid        => $user_uid,
       gid        => 'backuppc',
-      forcelocal => $user_forcelocal,
-      before     => $user_before,
+      forcelocal => true,
+      before     => [
+        Package[$package_name],
+        Exec['backuppc-ssh-keygen'],
+      ],
     }
 
     group { 'backuppc':
-      ensure     => $ensure,
+      ensure     => 'present',
       system     => true,
       gid        => $user_gid,
-      forcelocal => $user_forcelocal,
+      forcelocal => true,
+      before     => Package[$package_name],
     }
-  } else {
-    $require_user = undef
   }
 
-  # BackupPC package and service configuration
-  package { $backuppc::params::package:
-    ensure  => $package_ensure,
+  package { $package_name:
+    ensure  => 'installed',
+    before  => File[$config],
   }
 
-  service { $backuppc::params::service:
-    ensure    => $service_ensure,
-    enable    => $service_enable,
-    hasstatus => false,
-    pattern   => 'BackupPC'
-  }
-
-  file { $backuppc::params::config:
-    ensure  => $file_ensure,
+  file { $config_dir:
+    ensure  => 'directory',
     owner   => 'backuppc',
-    group   => $backuppc::params::group_apache,
+    group   => $apache_group,
+    mode    => '0750',
+    require => Package[$package_name],
+  }
+
+  file { $config:
+    ensure  => 'file',
+    owner   => 'backuppc',
+    group   => $apache_group,
     mode    => '0640',
     content => template('backuppc/config.pl.erb'),
     replace => $replace_config,
-    notify  => $notify_service,
+    require => Package[$package_name],
+    notify  => Service[$service_name],
   }
 
   if ! $replace_config {
-    file { "${backuppc::params::config}.puppet":
-      ensure  => $file_ensure,
+    file { "${config}.puppet":
+      ensure  => 'file',
       owner   => 'backuppc',
-      group   => $backuppc::params::group_apache,
+      group   => $apache_group,
       mode    => '0640',
       content => template('backuppc/config.pl.erb'),
     }
   }
 
-  file { $backuppc::params::config_directory:
-    ensure  => $directory_ensure,
+  file { "${config_dir}/pc":
+    ensure  => 'directory',
     owner   => 'backuppc',
-    group   => $backuppc::params::group_apache,
-    require => Package[$backuppc::params::package],
+    group   => $apache_group,
+    mode    => '0750',
   }
 
-  file { "${backuppc::params::config_directory}/pc":
-    ensure  => $directory_ensure,
+  file { "${config_dir}/hosts":
+    ensure  => 'file',
     owner   => 'backuppc',
-    group   => $backuppc::params::group_apache,
-    require => File[$backuppc::params::config_directory],
+    group   => $apache_group,
+    mode    => '0640',
+    require => Package[$package_name],
+  }
+
+  service { $service_name:
+    ensure => 'running',
+    enable => true,
   }
 
   if $manage_topdir {
     file { $topdir:
-      ensure  => 'directory',
-      owner   => 'backuppc',
-      group   => 'root',
-      mode    => '0750',
-      require => $require_user,
+      ensure => 'directory',
+      owner  => 'backuppc',
+      group  => 'root',
+      mode   => '0750',
     }
   }
 
   file { "${topdir}/.ssh":
-    ensure  => 'directory',
-    owner   => 'backuppc',
-    group   => 'backuppc',
-    mode    => '0700',
-    require => $require_user,
+    ensure => 'directory',
+    owner  => 'backuppc',
+    group  => 'backuppc',
+    mode   => '0700',
   }
 
   # Workaround for client exported resources that are
   # on a different osfamily. Maintain a symlink to alternative
   # config directory targets.
-  case $::osfamily {
+  case $os_family {
     'Debian': {
       file { '/etc/BackupPC':
-        ensure => $link_ensure,
-        target => $backuppc::params::config_directory,
+        ensure => 'link',
+        target => $config_dir,
       }
     }
     'RedHat': {
       file { '/etc/backuppc':
-        ensure => $link_ensure,
-        target => $backuppc::params::config_directory,
+        ensure => 'link',
+        target => $config_dir,
       }
     }
     default: {
-      notify { "If you've added support for ${::operatingsystem} you'll need to extend this case statement to.":
-      }
+      # Do nothing
     }
   }
 
   exec { 'backuppc-ssh-keygen':
-    command => "ssh-keygen -f ${topdir}/.ssh/id_rsa -C 'BackupPC on ${::fqdn}' -N ''",
+    command => "ssh-keygen -f ${topdir}/.ssh/id_rsa -C 'BackupPC on ${facts['networking']['fqdn']}' -N ''",
     user    => 'backuppc',
-    unless  => "test -f ${topdir}/.ssh/id_rsa",
+    creates => "${topdir}/.ssh/id_rsa",
     path    => ['/usr/bin','/bin'],
     require => [
-        Package[$backuppc::params::package],
+        Package[$package_name],
         File["${topdir}/.ssh"],
     ],
   }
 
-  # BackupPC apache configuration
-  if $apache_configuration {
-    file { $backuppc::params::config_apache:
-      ensure  => $file_ensure,
-      content => template("backuppc/apache_${::osfamily}.erb"),
-      require => Package[$backuppc::params::package],
-    }
-
-    # Create the default admin account
-    backuppc::server::user { 'backuppc':
-      password => $backuppc_password,
-      username => $backuppc_username,
-    }
-  }
-
-  # Export backuppc's authorized key to all clients
-  # TODO don't rely on facter to obtain the ssh key.
-  if ! empty($::backuppc_pubkey_rsa) {
-    @@ssh_authorized_key { "backuppc_${::fqdn}":
-      ensure  => present,
-      key     => $::backuppc_pubkey_rsa,
-      name    => "backuppc_${::fqdn}",
+  if $facts['backuppc_pubkey_rsa'] {
+    @@ssh_authorized_key { "backuppc_${facts['networking']['fqdn']}":
+      ensure  => 'present',
+      key     => $facts['backuppc_pubkey_rsa'],
+      name    => "backuppc_${facts['networking']['fqdn']}",
       user    => 'backup',
-      options => [
-        'command="~/backuppc.sh"',
-        'no-agent-forwarding',
-        'no-port-forwarding',
-        'no-pty',
-        'no-X11-forwarding',
-      ],
       type    => 'ssh-rsa',
-      tag     => "backuppc_${::fqdn}",
+      tag     => "backuppc_${facts['networking']['fqdn']}",
     }
   }
 
-  # Hosts
-  File <<| tag == "backuppc_config_${::fqdn}" |>> {
-    group   => $backuppc::params::group_apache,
-    notify  => $notify_service,
-    require => File["${backuppc::params::config_directory}/pc"],
+  File <<| tag == "backuppc_config_${facts['networking']['fqdn']}" |>> {
+    group  => $apache_group,
+    notify => Service[$service_name],
   }
-  Augeas <<| tag == "backuppc_hosts_${::fqdn}" |>> {
-    notify  => $notify_service,
-    require => Package[$backuppc::params::package],
-  }
-  #File_line <<| tag == "backuppc_hosts_${::fqdn}" |>> {
-  #  notify  => $notify_service,
-  #  require => Package[$backuppc::params::package],
-  #}
-
-  # Ensure readable file permissions on
-  # the known hosts file.
-  if $manage_ssh_known_hosts {
-    file { '/etc/ssh/ssh_known_hosts':
-      ensure => file,
-      owner  => 'root',
-      group  => 'root',
-      mode   => '0644',
-    }
+  Augeas <<| tag == "backuppc_hosts_${facts['networking']['fqdn']}" |>> {
+    notify  => Service[$service_name],
+    require => File["${config_dir}/hosts"],
   }
 
-  Sshkey <<| tag == "backuppc_sshkeys_${::fqdn}" |>>
+  Sshkey <<| tag == "backuppc_sshkeys_${facts['networking']['fqdn']}" |>>
 }
