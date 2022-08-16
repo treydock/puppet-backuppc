@@ -1,6 +1,10 @@
 require 'spec_helper_acceptance'
 
 describe 'backuppc::server class', if: server_supported do
+  before(:each) do
+    skip("Does not support server") unless server_supported
+  end
+
   context 'default parameters' do
     it 'runs successfully' do
       pp = <<-EOS
