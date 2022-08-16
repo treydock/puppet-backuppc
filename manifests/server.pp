@@ -191,7 +191,7 @@ class backuppc::server (
   Variant[Integer, Float] $full_period = 6.97,
   Variant[Integer, Float] $incr_period = 0.97,
   Integer $fill_cycle = 0,
-  Array[Integer] $full_keep_cnt = [1],
+  Variant[Array[Integer], Integer] $full_keep_cnt = [1],
   Integer $full_age_max = 180,
   Integer $incr_keep_cnt = 6,
   Integer $incr_age_max = 30,

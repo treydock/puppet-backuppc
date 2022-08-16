@@ -157,7 +157,7 @@ class backuppc::client (
   Optional[Boolean] $backups_disable = undef,
   Optional[Variant[Integer, Float]] $full_period = undef,
   Optional[Variant[Integer, Float]] $incr_period = undef,
-  Optional[Array[Integer]] $full_keep_cnt = undef,
+  Optional[Variant[Array[Integer], Integer]] $full_keep_cnt = undef,
   Optional[Integer] $full_keep_cnt_min = undef,
   Optional[Integer] $full_age_max = undef,
   Optional[Integer] $incr_keep_cnt = undef,
