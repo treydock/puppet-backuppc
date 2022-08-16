@@ -260,8 +260,8 @@ $Conf{EMailHeaders} = <<EOF;
 <%= header %>: <%= value %>
 <% end -%>
 EOF
-$Conf{CgiAdminUserGroup} = '<%= @cgi_admin_user_group.join(' ') %>';
-$Conf{CgiAdminUsers} = '<%= @cgi_admin_users.join(' ') %>';
+$Conf{CgiAdminUserGroup} = '<%= Array(@cgi_admin_user_group).join(' ') %>';
+$Conf{CgiAdminUsers} = '<%= Array(@cgi_admin_users).join(' ') %>';
 $Conf{SCGIServerPort} = -1;
 $Conf{CgiURL} = '<%= @cgi_url %>';
 $Conf{RrdToolPath} = "/usr/bin/rrdtool";
