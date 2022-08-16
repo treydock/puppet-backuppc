@@ -13,7 +13,7 @@ $Conf{FullPeriod} = <%= @full_period %>;
 $Conf{IncrPeriod} = <%= @incr_period %>;
 <% end -%>
 <% if @full_keep_cnt -%>
-$Conf{FullKeepCnt} = [<%= @full_keep_cnt.join(', ') %>];
+$Conf{FullKeepCnt} = [<%= Array(@full_keep_cnt).join(', ') %>];
 <% end -%>
 <% if @full_keep_cnt_min -%>
 $Conf{FullKeepCntMin} = <%= @full_keep_cnt_min %>;
