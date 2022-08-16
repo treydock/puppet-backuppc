@@ -243,7 +243,7 @@ $Conf{EMailFromUserName} = '<%= @email_from_user_name %>';
 $Conf{EMailAdminUserName} = '<%= @email_admin_user_name %>';
 $Conf{EMailAdminSubject} = '';
 <% if @email_user_dest_domain -%>
-$Conf{EMailUserDestDomain} = '@<%= @email_user_dest_domain %>';
+$Conf{EMailUserDestDomain} = '<%= @email_user_dest_domain %>';
 <% else -%>
 $Conf{EMailUserDestDomain} = '';
 <% end -%>
