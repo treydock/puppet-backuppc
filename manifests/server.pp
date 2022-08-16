@@ -174,7 +174,7 @@ class backuppc::server (
   Stdlib::Absolutepath $cgi_image_dir_url  = '/BackupPC/images',
   String $apache_group = 'apache',
   Stdlib::Fqdn $server_host = $facts['networking']['fqdn'],
-  Array[Integer]$wakeup_schedule = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],
+  Array[Integer] $wakeup_schedule = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],
   Boolean $pool_v3_enabled = false,
   Integer $max_backups = 4,
   Integer $max_user_backups = 4,
@@ -198,7 +198,7 @@ class backuppc::server (
   Integer $restore_info_keep_cnt = 10,
   Integer $archive_info_keep_cnt = 10,
   Integer $blackout_good_cnt = 7,
-  Array[Backuppc::BlackoutPeriod] $blackout_periods = [ 
+  Array[Backuppc::BlackoutPeriod] $blackout_periods = [
     { hour_begin =>  7.0,
       hour_end   => 19.5,
       week_days  => [1, 2, 3, 4, 5],
@@ -235,7 +235,7 @@ class backuppc::server (
   $os_family = $facts['os']['family']
   $os_major = $facts['os']['release']['major']
   $os = "${os_family}-${os_major}"
-  $supported = ["RedHat-8", "Debian-11", "Debian-22.04"]
+  $supported = ['RedHat-8', 'Debian-11', 'Debian-22.04']
   if ! ($os in $supported) {
     fail("Unsupported OS family-major ${os}, only support ${supported.join(',')}")
   }
@@ -275,8 +275,8 @@ class backuppc::server (
   }
 
   package { $package_name:
-    ensure  => 'installed',
-    before  => File[$config],
+    ensure => 'installed',
+    before => File[$config],
   }
 
   file { $config_dir:
@@ -309,10 +309,10 @@ class backuppc::server (
   }
 
   file { "${config_dir}/pc":
-    ensure  => 'directory',
-    owner   => 'backuppc',
-    group   => $apache_group,
-    mode    => '0750',
+    ensure => 'directory',
+    owner  => 'backuppc',
+    group  => $apache_group,
+    mode   => '0750',
   }
 
   file { "${config_dir}/hosts":
@@ -378,12 +378,12 @@ class backuppc::server (
 
   if $facts['backuppc_pubkey_rsa'] {
     @@ssh_authorized_key { "backuppc_${facts['networking']['fqdn']}":
-      ensure  => 'present',
-      key     => $facts['backuppc_pubkey_rsa'],
-      name    => "backuppc_${facts['networking']['fqdn']}",
-      user    => 'backup',
-      type    => 'ssh-rsa',
-      tag     => "backuppc_${facts['networking']['fqdn']}",
+      ensure => 'present',
+      key    => $facts['backuppc_pubkey_rsa'],
+      name   => "backuppc_${facts['networking']['fqdn']}",
+      user   => 'backup',
+      type   => 'ssh-rsa',
+      tag    => "backuppc_${facts['networking']['fqdn']}",
     }
   }
 

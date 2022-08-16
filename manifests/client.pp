@@ -233,8 +233,7 @@ class backuppc::client (
     }
 
     if ! empty($system_additional_commands) {
-      $additional_sudo_commands = join($system_additional_commands, ', ')
-      $sudo_commands = "${additional_sudo_commands}"
+      $sudo_commands = join($system_additional_commands, ', ')
     } else {
       $sudo_commands = ''
     }
@@ -297,9 +296,9 @@ class backuppc::client (
     }
 
     file { $system_account_home_directory:
-      ensure  => $directory_ensure,
-      owner   => $system_account,
-      group   => $system_account,
+      ensure => $directory_ensure,
+      owner  => $system_account,
+      group  => $system_account,
     }
 
     file { "${system_account_home_directory}/.ssh":
@@ -309,7 +308,7 @@ class backuppc::client (
       group   => $system_account,
       seltype => 'ssh_home_t',
     }
-    
+
     file { "${system_account_home_directory}/.ssh/authorized_keys":
       ensure  => $file_ensure,
       mode    => '0600',
@@ -317,7 +316,7 @@ class backuppc::client (
       group   => $system_account,
       seltype => 'ssh_home_t',
     }
-    
+
     file { "${system_account_home_directory}/backuppc.sh":
       ensure  => $file_ensure,
       owner   => 'root',

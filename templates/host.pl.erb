@@ -134,14 +134,14 @@ $Conf{RsyncArgsExtra} = [
 ];
 <% end -%>
 <% if @rsync_restore_args -%>
-$Conf{RsyncArgs} = [
+$Conf{RsyncRestoreArgs} = [
 <% @rsync_restore_args.each do |arg| -%>
     '<%= arg %>',
 <% end -%>
 ];
 <% end -%>
 <% if @rsync_restore_args_extra -%>
-$Conf{RsyncArgsExtra} = [
+$Conf{RsyncRestoreArgsExtra} = [
 <% @rsync_restore_args_extra.each do |arg| -%>
     '<%= arg %>',
 <% end -%>
