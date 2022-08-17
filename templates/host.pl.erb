@@ -112,7 +112,7 @@ $Conf{TarClientRestoreCmd} =
 <% if @rsync_client_path -%>
 $Conf{RsyncClientPath} = '<%= @rsync_client_path %>';
 <% else -%>
-$Conf{RsyncClientPath} = '<%= @system_account == 'root' ? '' : 'sudo ' %><%= @rsync_path%>';
+$Conf{RsyncClientPath} = '<%= @rsync_path %>';
 <% end -%>
 <%- if @rsync_ssh_args -%>
 $Conf{RsyncSshArgs} = ['<%= @rsync_ssh_args %>'];

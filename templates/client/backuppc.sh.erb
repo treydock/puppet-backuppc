@@ -5,9 +5,17 @@
 #
 
 case "${SSH_ORIGINAL_COMMAND}" in
-  <%= @rsync_path %>*|<%= @tar_path %>*<% if @system_additional_commands.count > 0 %>|<%= @system_additional_commands.join('*|') %>*<% end %> )
+sudo <%= @rsync_path %>*|sudo <%= @tar_path %>*)
+  ${SSH_ORIGINAL_COMMAND}
+  ;;
+<%= @rsync_path %>*|<%= @tar_path %>*)
   sudo ${SSH_ORIGINAL_COMMAND}
   ;;
+<% @system_additional_commands.each do |cmd| -%>
+<%= cmd %>*)
+  sudo ${SSH_ORIGINAL_COMMAND}
+  ;;
+<% end -%>
 *)
   echo "REJECTED: ${SSH_ORIGINAL_COMMAND}"
   exit 1
