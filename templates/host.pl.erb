@@ -115,7 +115,7 @@ $Conf{RsyncClientPath} = '<%= @rsync_client_path %>';
 $Conf{RsyncClientPath} = '<%= @rsync_path %>';
 <% end -%>
 <%- if @rsync_ssh_args -%>
-$Conf{RsyncSshArgs} = ['<%= @rsync_ssh_args %>'];
+$Conf{RsyncSshArgs} = ['<%= @rsync_ssh_args.join("', '") %>'];
 <% else -%>
 $Conf{RsyncSshArgs} = ['-e', '$sshPath -l <%= @system_account %>'];
 <% end -%>

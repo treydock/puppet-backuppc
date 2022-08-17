@@ -180,7 +180,7 @@ class backuppc::client (
   Optional[String] $tar_incr_args = undef,
   Optional[String] $tar_client_restore_cmd = undef,
   Optional[String] $rsync_client_path = undef,
-  Optional[String] $rsync_ssh_args = undef,
+  Optional[Array] $rsync_ssh_args = undef,
   Optional[Array] $rsync_args = undef,
   Optional[Array] $rsync_args_extra = undef,
   Optional[Array] $rsync_restore_args = undef,
