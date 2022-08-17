@@ -5,10 +5,7 @@
 #
 
 case "${SSH_ORIGINAL_COMMAND}" in
-sudo <%= @rsync_path %>*|sudo <%= @tar_path %>*)
-  ${SSH_ORIGINAL_COMMAND}
-  ;;
-<%= @rsync_path %>*|<%= @tar_path %>*)
+<%= @rsync_client_path.nil? ? @rsync_path : @rsync_client_path %>*|<%= @tar_path %>*)
   sudo ${SSH_ORIGINAL_COMMAND}
   ;;
 <% @system_additional_commands.each do |cmd| -%>
