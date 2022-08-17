@@ -275,16 +275,17 @@ class backuppc::client (
       }
 
       user { $system_account:
-        ensure     => $ensure,
-        home       => $system_account_home_directory,
-        managehome => true,
-        shell      => '/bin/bash',
-        comment    => 'BackupPC',
-        system     => true,
-        uid        => $system_account_uid,
-        gid        => $system_account,
-        forcelocal => true,
-        before     => $user_before,
+        ensure         => $ensure,
+        home           => $system_account_home_directory,
+        managehome     => true,
+        shell          => '/bin/bash',
+        comment        => 'BackupPC',
+        system         => true,
+        uid            => $system_account_uid,
+        gid            => $system_account,
+        forcelocal     => true,
+        purge_ssh_keys => true,
+        before         => $user_before,
       }
 
       group { $system_account:
