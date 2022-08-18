@@ -113,7 +113,7 @@ $Conf{TarClientRestoreCmd} =
   . ' env LC_ALL=C $tarPath -x -p --numeric-owner --same-owner'
   . ' -v -f - -C $shareName+';
 $Conf{TarClientPath} = '<%= @tar_path %>';
-$Conf{RsyncClientPath} = '<%= @rsync_cmd_with_sudo ? 'sudo ' : '' %><%= @rsync_path %>';
+$Conf{RsyncClientPath} = '<%= @rsync_client_path %>';
 $Conf{RsyncBackupPCPath} = "<%= @rsync_bpc_path %>";
 $Conf{RsyncSshArgs} = ['-e', '$sshPath -l <%= @rsync_cmd_default_user %>'];
 $Conf{RsyncShareName} = '/';

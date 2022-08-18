@@ -206,7 +206,7 @@ class backuppc::server (
   ],
   Boolean $blackout_zero_files_is_fatal = true,
   String $rsync_cmd_default_user = 'root',
-  Boolean $rsync_cmd_with_sudo = false,
+  String $rsync_client_path = '/usr/bin/rsync',
   Array $rsync_args = [],
   Array $rsync_args_extra = [],
   Array $rsync_full_args_extra = ['--checksum'],
