@@ -295,7 +295,8 @@ class backuppc::server (
     content => template('backuppc/config.pl.erb'),
     replace => $replace_config,
     require => Package[$package_name],
-    notify  => Service[$service_name],
+    before  => Service[$service_name],
+    notify  => Exec['backuppc reload'],
   }
 
   if ! $replace_config {
@@ -326,6 +327,12 @@ class backuppc::server (
   service { $service_name:
     ensure => 'running',
     enable => true,
+  }
+
+  exec { 'backuppc reload':
+    command     => "systemctl reload-or-restart ${service_name}",
+    path        => '/usr/bin:/bin:/usr/sbin:/sbin',
+    refreshonly => true,
   }
 
   if $manage_topdir {
@@ -389,11 +396,13 @@ class backuppc::server (
 
   File <<| tag == "backuppc_config_${facts['networking']['fqdn']}" |>> {
     group  => $apache_group,
-    notify => Service[$service_name],
+    before => Service[$service_name],
+    notify => Exec['backuppc reload'],
   }
   Augeas <<| tag == "backuppc_hosts_${facts['networking']['fqdn']}" |>> {
-    notify  => Service[$service_name],
+    before  => Service[$service_name],
     require => File["${config_dir}/hosts"],
+    notify  => Exec['backuppc reload'],
   }
 
   Sshkey <<| tag == "backuppc_sshkeys_${facts['networking']['fqdn']}" |>>
