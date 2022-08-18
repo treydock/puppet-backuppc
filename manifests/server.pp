@@ -105,8 +105,8 @@
 #   config.pl BackupZeroFilesIsFatal
 # @param rsync_cmd_default_user
 #   Default user for rsync backups
-# @param rsync_cmd_with_sudo
-#   Use sudo with rsync command
+# @param rsync_client_path
+#   config.pl RsyncClientPath
 # @param rsync_args
 #   config.pl RsyncArgs
 # @param rsync_args_extra
