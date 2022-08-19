@@ -149,7 +149,11 @@ $Conf{RsyncRestoreArgsExtra} = [
 <% end -%>
 <% if @rsync_share_name -%>
   <%- if @rsync_share_name.is_a?(Array) -%>
-$Conf{RsyncShareName} = ['<%= @rsync_share_name.join("', '") %>'];
+$Conf{RsyncShareName} = [
+    <%- @rsync_share_name.each do |share| -%>
+    '<%= share %>',
+    <%- end -%>
+];
   <%- else -%>
 $Conf{RsyncShareName} = '<%= @rsync_share_name %>';
   <%- end -%>
