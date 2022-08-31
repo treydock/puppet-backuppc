@@ -1,0 +1,1803 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Puppet Class: backuppc::client
+  
+    &mdash; Documentation by YARD 0.9.28
+  
+</title>
+
+  <link rel="stylesheet" href="../css/style.css" type="text/css" />
+
+  <link rel="stylesheet" href="../css/common.css" type="text/css" />
+
+<script type="text/javascript">
+  pathId = "puppet_classes::backuppc::client";
+  relpath = '../';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="../puppet_class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="../_index.html">Index (b)</a> &raquo;
+    <span class='title'><span class='object_link'>Puppet Classes</span></span>
+     &raquo; 
+    <span class="title">backuppc::client</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="puppet_class_list_link"
+        href="../puppet_class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Puppet Class: backuppc::client</h1>
+<div class="box_info">
+  
+  
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>
+      manifests/client.pp
+    </dd>
+  </dl>
+</div>
+
+  <h2>Summary</h2>
+  Manage BackupPC client
+
+<h2>Overview</h2>
+<div class="docstring">
+  <div class="discussion">
+    
+  </div>
+</div>
+
+
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>backuppc_hostname</span>
+      
+      
+        <span class='type'>(<tt>Stdlib::Host</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>The BackupPC hostname This is used to match which BackupPC server is
+authorized for backups</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>ensure</span>
+      
+      
+        <span class='type'>(<tt>Enum['present','absent']</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;present&#39;</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Whether to add or remove BackupPC client resources</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>config_name</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$facts[&#39;networking&#39;][&#39;fqdn&#39;]</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Name of BackupPC client config</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>manage_system_account</span>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>true</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Manage the user account used to perform backups</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>system_account</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;backup&#39;</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Account used to perform backups</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>system_account_home_directory</span>
+      
+      
+        <span class='type'>(<tt>Stdlib::Absolutepath</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;/var/backups&#39;</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>The home directory of backup user</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>system_account_uid</span>
+      
+      
+        <span class='type'>(<tt>Optional[Integer]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Backup user UID</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>system_account_gid</span>
+      
+      
+        <span class='type'>(<tt>Optional[Integer]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Backup user and group GID</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>system_additional_commands</span>
+      
+      
+        <span class='type'>(<tt>Array</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>[]</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Authorize commands for backup user via sudo</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>system_additional_commands_noexec</span>
+      
+      
+        <span class='type'>(<tt>Array</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>[]</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Authorize commands for backup user via sudo with NOEXEC</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>manage_sudo</span>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>false</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Include sudo class</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>manage_rsync</span>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>true</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Manage rsync package</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>rsync_path</span>
+      
+      
+        <span class='type'>(<tt>Stdlib::Absolutepath</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;/usr/bin/rsync&#39;</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>rsync path</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>tar_path</span>
+      
+      
+        <span class='type'>(<tt>Stdlib::Absolutepath</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;/bin/gtar&#39;</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>tar path</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>client_name_alias</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>See config.pl ClientNameAlias</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>xfer_method</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;rsync&#39;</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>See config.pl XferMethod</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>xfer_loglevel</span>
+      
+      
+        <span class='type'>(<tt>Integer</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>1</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>See config.pl XferLogLevel</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>backups_disable</span>
+      
+      
+        <span class='type'>(<tt>Optional[Boolean]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>See config.pl BackupsDisable</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>full_period</span>
+      
+      
+        <span class='type'>(<tt>Optional[Variant[Integer, Float]]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>See config.pl FullPeriod</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>incr_period</span>
+      
+      
+        <span class='type'>(<tt>Optional[Variant[Integer, Float]]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>See config.pl IncrPeriod</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>full_keep_cnt</span>
+      
+      
+        <span class='type'>(<tt>Optional[Variant[Array[Integer], Integer]]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>See config.pl FullKeepCnt</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>full_keep_cnt_min</span>
+      
+      
+        <span class='type'>(<tt>Optional[Integer]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>See config.pl FullKeepCntMin</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>full_age_max</span>
+      
+      
+        <span class='type'>(<tt>Optional[Integer]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>See config.pl FullAgeMax</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>incr_keep_cnt</span>
+      
+      
+        <span class='type'>(<tt>Optional[Integer]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>See config.pl IncrKeepCnt</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>incr_keep_cnt_min</span>
+      
+      
+        <span class='type'>(<tt>Optional[Integer]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>See config.pl IncrKeepCntMin</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>incr_age_max</span>
+      
+      
+        <span class='type'>(<tt>Optional[Integer]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>See config.pl IncrAgeMax</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>blackout_bad_ping_limit</span>
+      
+      
+        <span class='type'>(<tt>Optional[Integer]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>See config.pl BlackoutBadPingLimit</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>ping_max_msec</span>
+      
+      
+        <span class='type'>(<tt>Optional[Integer]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>See config.pl PingMaxMsec</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>blackout_good_cnt</span>
+      
+      
+        <span class='type'>(<tt>Optional[Integer]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>See config.pl BlackoutGoodCnt</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>backup_files_only</span>
+      
+      
+        <span class='type'>(<tt>Optional[Variant[Hash,Array,String]]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>See config.pl BackupFilesOnly</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>backup_files_exclude</span>
+      
+      
+        <span class='type'>(<tt>Optional[Variant[Hash,Array,String]]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>See config.pl BackupFilesExclude</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>smb_share_name</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>See config.pl SmbShareName</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>smb_share_username</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>See config.pl SmbShareUserName</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>smb_share_passwd</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>See config.pl SmbSharePasswd</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>smb_client_full_cmd</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>See config.pl SmbClientFullCmd</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>smb_client_incr_cmd</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>See config.pl SmbClientIncrCmd</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>smb_client_restore_cmd</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>See config.pl SmbClientRestoreCmd</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>tar_share_name</span>
+      
+      
+        <span class='type'>(<tt>Optional[Variant[Array, String]]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>See config.pl TarShareName</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>tar_client_cmd</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>See config.pl TarClientCmd</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>tar_full_args</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>See config.pl TarFullArgs</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>tar_incr_args</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>See config.pl TarIncrArgs</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>tar_client_restore_cmd</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>See config.pl TarClientRestoreCmd</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>rsync_client_path</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>See config.pl RsyncClientPath</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>rsync_ssh_args</span>
+      
+      
+        <span class='type'>(<tt>Optional[Array]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>See config.pl RsyncSshArgs</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>rsync_args</span>
+      
+      
+        <span class='type'>(<tt>Optional[Array]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>See config.pl RsyncArgs</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>rsync_args_extra</span>
+      
+      
+        <span class='type'>(<tt>Optional[Array]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>See config.pl RsyncArgsExtra</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>rsync_restore_args</span>
+      
+      
+        <span class='type'>(<tt>Optional[Array]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>See config.pl RsyncRestoreArgs</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>rsync_restore_args_extra</span>
+      
+      
+        <span class='type'>(<tt>Optional[Array]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>See config.pl RsyncRestoreArgsExtra</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>rsync_share_name</span>
+      
+      
+        <span class='type'>(<tt>Optional[Variant[Array, String]]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>See config.pl RsyncShareName</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>rsyncd_client_port</span>
+      
+      
+        <span class='type'>(<tt>Optional[Integer]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>See config.pl RsyncdClientPort</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>rsyncd_user_name</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>See config.pl RsyncdUserName</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>rsyncd_passwd</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>See config.pl RsyncdPasswd</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>dump_pre_user_cmd</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>See config.pl DumpPreUserCmd</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>dump_post_user_cmd</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>See config.pl DumpPostUserCmd</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>dump_pre_share_cmd</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>See config.pl DumpPreShareCmd</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>dump_post_share_cmd</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>See config.pl DumpPostShareCmd</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>restore_pre_user_cmd</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>See config.pl RestorePreUserCmd</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>restore_post_user_cmd</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>See config.pl RestorePostUserCmd</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>user_cmd_check_status</span>
+      
+      
+        <span class='type'>(<tt>Optional[Boolean]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>See config.pl UserCmdCheckStatus</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>email_notify_min_days</span>
+      
+      
+        <span class='type'>(<tt>Optional[Variant[Integer, Float]]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>See config.pl EMailNotifyMinDays</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>email_from_user_name</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>See config.pl EMailFromUserName</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>email_admin_user_name</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>See config.pl EMailAdminUserName</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>email_notify_old_backup_days</span>
+      
+      
+        <span class='type'>(<tt>Optional[Integer]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>See config.pl EMailNotifyOldBackupDays</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>hosts_file_dhcp</span>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>false</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Whether to use enable DHCP in hosts file</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>hosts_file_user</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;backuppc&#39;</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Hosts file user</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>hosts_file_more_users</span>
+      
+      
+        <span class='type'>(<tt>Array</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>[]</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Hosts file more users</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>export_sshkey</span>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>true</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Set whether to export the SSH key for the backup client to BackupPC server</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+
+
+</div><div class="method_details_list">
+  <table class="source_code">
+    <tr>
+      <td>
+        <pre class="lines">
+
+
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321
+322
+323
+324
+325
+326
+327
+328
+329
+330
+331
+332
+333
+334
+335
+336
+337
+338
+339
+340
+341
+342
+343
+344
+345
+346
+347
+348
+349
+350
+351
+352
+353
+354
+355
+356
+357
+358
+359
+360
+361
+362
+363
+364
+365
+366
+367
+368
+369
+370
+371
+372
+373
+374
+375
+376
+377
+378
+379</pre>
+      </td>
+      <td>
+        <pre class="code"><span class="info file"># File 'manifests/client.pp', line 139</span>
+
+class backuppc::client (
+  Stdlib::Host $backuppc_hostname,
+  Enum[&#39;present&#39;,&#39;absent&#39;] $ensure = &#39;present&#39;,
+  String $config_name = $facts[&#39;networking&#39;][&#39;fqdn&#39;],
+  Boolean $manage_system_account = true,
+  String $system_account = &#39;backup&#39;,
+  Stdlib::Absolutepath $system_account_home_directory = &#39;/var/backups&#39;,
+  Optional[Integer] $system_account_uid = undef,
+  Optional[Integer] $system_account_gid = undef,
+  Array $system_additional_commands = [],
+  Array $system_additional_commands_noexec = [],
+  Boolean $manage_sudo = false,
+  Boolean $manage_rsync = true,
+  Stdlib::Absolutepath $rsync_path = &#39;/usr/bin/rsync&#39;,
+  Stdlib::Absolutepath $tar_path = &#39;/bin/gtar&#39;,
+  Optional[String] $client_name_alias = undef,
+  String $xfer_method = &#39;rsync&#39;,
+  Integer $xfer_loglevel = 1,
+  Optional[Boolean] $backups_disable = undef,
+  Optional[Variant[Integer, Float]] $full_period = undef,
+  Optional[Variant[Integer, Float]] $incr_period = undef,
+  Optional[Variant[Array[Integer], Integer]] $full_keep_cnt = undef,
+  Optional[Integer] $full_keep_cnt_min = undef,
+  Optional[Integer] $full_age_max = undef,
+  Optional[Integer] $incr_keep_cnt = undef,
+  Optional[Integer] $incr_keep_cnt_min = undef,
+  Optional[Integer] $incr_age_max = undef,
+  Optional[Integer] $blackout_bad_ping_limit = undef,
+  Optional[Integer] $ping_max_msec = undef,
+  Optional[Integer] $blackout_good_cnt = undef,
+  Optional[Variant[Hash,Array,String]] $backup_files_only = undef,
+  Optional[Variant[Hash,Array,String]] $backup_files_exclude  = undef,
+  Optional[String] $smb_share_name = undef,
+  Optional[String] $smb_share_username    = undef,
+  Optional[String] $smb_share_passwd      = undef,
+  Optional[String] $smb_client_full_cmd   = undef,
+  Optional[String] $smb_client_incr_cmd   = undef,
+  Optional[String] $smb_client_restore_cmd = undef,
+  Optional[Variant[Array, String]] $tar_share_name = undef,
+  Optional[String] $tar_client_cmd = undef,
+  Optional[String] $tar_full_args = undef,
+  Optional[String] $tar_incr_args = undef,
+  Optional[String] $tar_client_restore_cmd = undef,
+  Optional[String] $rsync_client_path = undef,
+  Optional[Array] $rsync_ssh_args = undef,
+  Optional[Array] $rsync_args = undef,
+  Optional[Array] $rsync_args_extra = undef,
+  Optional[Array] $rsync_restore_args = undef,
+  Optional[Array] $rsync_restore_args_extra = undef,
+  Optional[Variant[Array, String]] $rsync_share_name = undef,
+  Optional[Integer] $rsyncd_client_port = undef,
+  Optional[String] $rsyncd_user_name = undef,
+  Optional[String] $rsyncd_passwd = undef,
+  Optional[String] $dump_pre_user_cmd = undef,
+  Optional[String] $dump_post_user_cmd = undef,
+  Optional[String] $dump_pre_share_cmd = undef,
+  Optional[String] $dump_post_share_cmd = undef,
+  Optional[String] $restore_pre_user_cmd = undef,
+  Optional[String] $restore_post_user_cmd = undef,
+  Optional[Boolean] $user_cmd_check_status = undef,
+  Optional[Variant[Integer, Float]] $email_notify_min_days = undef,
+  Optional[String] $email_from_user_name  = undef,
+  Optional[String] $email_admin_user_name = undef,
+  Optional[Integer] $email_notify_old_backup_days = undef,
+  Boolean $hosts_file_dhcp = false,
+  String $hosts_file_user = &#39;backuppc&#39;,
+  Array $hosts_file_more_users = [],
+  Boolean $export_sshkey = true,
+) {
+
+  case $ensure {
+    &#39;absent&#39;: {
+      $file_ensure = &#39;absent&#39;
+      $directory_ensure = &#39;absent&#39;
+    }
+    default: {
+      $file_ensure = &#39;file&#39;
+      $directory_ensure = &#39;directory&#39;
+    }
+  }
+
+  if $xfer_method in [&#39;rsync&#39;, &#39;tar&#39;] {
+    if $xfer_method == &#39;rsync&#39; {
+      if $manage_rsync and $ensure == &#39;present&#39; {
+        ensure_packages([&#39;rsync&#39;])
+      }
+      $sudo_command_noexec = $rsync_path
+    }
+    else {
+      $sudo_command_noexec = $tar_path
+    }
+
+    if $manage_sudo and $ensure == &#39;present&#39; {
+      include sudo
+    }
+
+    if ! empty($system_additional_commands) {
+      $sudo_commands = join($system_additional_commands, &#39;, &#39;)
+    } else {
+      $sudo_commands = &#39;&#39;
+    }
+
+    if ! empty($system_additional_commands_noexec) {
+      $additional_sudo_commands_noexec = join($system_additional_commands_noexec, &#39;, &#39;)
+      $sudo_commands_noexec = &quot;${sudo_command_noexec}, ${additional_sudo_commands_noexec}&quot;
+    } else {
+      $sudo_commands_noexec = $sudo_command_noexec
+    }
+
+    if ! empty($sudo_commands) {
+      $sudo_ensure = $ensure
+    } else {
+      $sudo_ensure = &#39;absent&#39;
+    }
+
+    sudo::conf { &#39;backuppc&#39;:
+      ensure  =&gt; $sudo_ensure,
+      content =&gt; [
+        &quot;Defaults:${system_account} !requiretty&quot;,
+        &quot;${system_account} ALL=(ALL:ALL) NOPASSWD: ${sudo_commands}&quot;,
+      ],
+    }
+
+    sudo::conf { &#39;backuppc_noexec&#39;:
+      ensure  =&gt; $ensure,
+      content =&gt; [
+        &quot;Defaults:${system_account} !requiretty&quot;,
+        &quot;${system_account} ALL=(ALL:ALL) NOEXEC:NOPASSWD: ${sudo_commands_noexec}&quot;,
+      ],
+    }
+
+    if $manage_system_account {
+      if $ensure == &#39;present&#39; {
+        $user_before = undef
+      } else {
+        $user_before = Group[$system_account]
+      }
+
+      user { $system_account:
+        ensure         =&gt; $ensure,
+        home           =&gt; $system_account_home_directory,
+        managehome     =&gt; true,
+        shell          =&gt; &#39;/bin/bash&#39;,
+        comment        =&gt; &#39;BackupPC&#39;,
+        system         =&gt; true,
+        uid            =&gt; $system_account_uid,
+        gid            =&gt; $system_account,
+        forcelocal     =&gt; true,
+        purge_ssh_keys =&gt; true,
+        before         =&gt; $user_before,
+      }
+
+      group { $system_account:
+        ensure     =&gt; $ensure,
+        system     =&gt; true,
+        gid        =&gt; $system_account_gid,
+        forcelocal =&gt; true,
+      }
+    }
+
+    file { $system_account_home_directory:
+      ensure =&gt; $directory_ensure,
+      owner  =&gt; $system_account,
+      group  =&gt; $system_account,
+    }
+
+    file { &quot;${system_account_home_directory}/.ssh&quot;:
+      ensure  =&gt; $directory_ensure,
+      mode    =&gt; &#39;0700&#39;,
+      owner   =&gt; $system_account,
+      group   =&gt; $system_account,
+      seltype =&gt; &#39;ssh_home_t&#39;,
+    }
+
+    file { &quot;${system_account_home_directory}/.ssh/authorized_keys&quot;:
+      ensure  =&gt; $file_ensure,
+      mode    =&gt; &#39;0600&#39;,
+      owner   =&gt; $system_account,
+      group   =&gt; $system_account,
+      seltype =&gt; &#39;ssh_home_t&#39;,
+    }
+
+    file { &quot;${system_account_home_directory}/backuppc.sh&quot;:
+      ensure  =&gt; $file_ensure,
+      owner   =&gt; &#39;root&#39;,
+      group   =&gt; &#39;root&#39;,
+      mode    =&gt; &#39;0755&#39;,
+      content =&gt; template(&#39;backuppc/client/backuppc.sh.erb&#39;),
+    }
+
+    Ssh_authorized_key &lt;&lt;| tag == &quot;backuppc_${backuppc_hostname}&quot; |&gt;&gt; {
+      ensure  =&gt; $ensure,
+      user    =&gt; $system_account,
+      options =&gt; [
+        &quot;command=\&quot;${system_account_home_directory}/backuppc.sh\&quot;&quot;,
+        &#39;no-agent-forwarding&#39;,
+        &#39;no-port-forwarding&#39;,
+        &#39;no-pty&#39;,
+        &#39;no-X11-forwarding&#39;,
+      ],
+      require =&gt; File[&quot;${system_account_home_directory}/.ssh&quot;]
+    }
+  }
+
+  if $export_sshkey and $facts[&#39;networking&#39;][&#39;fqdn&#39;] != $backuppc_hostname {
+    @@sshkey { $facts[&#39;networking&#39;][&#39;fqdn&#39;]:
+      ensure =&gt; $ensure,
+      type   =&gt; &#39;ssh-rsa&#39;,
+      key    =&gt; $facts[&#39;ssh&#39;][&#39;rsa&#39;][&#39;key&#39;],
+      tag    =&gt; &quot;backuppc_sshkeys_${backuppc_hostname}&quot;,
+    }
+  }
+
+  if $ensure == &#39;present&#39; {
+    @@augeas { &quot;backuppc_host_${config_name}-create&quot;:
+      context =&gt; &#39;/files/etc/BackupPC/hosts&#39;,
+      changes =&gt; template(&quot;${module_name}/host-augeas-create.erb&quot;),
+      lens    =&gt; &#39;BackupPCHosts.lns&#39;,
+      incl    =&gt; &#39;/etc/BackupPC/hosts&#39;,
+      onlyif  =&gt; &quot;match *[host = &#39;${config_name}&#39;] size == 0&quot;,
+      before  =&gt; Augeas[&quot;backuppc_host_${config_name}-update&quot;],
+      tag     =&gt; &quot;backuppc_hosts_${backuppc_hostname}&quot;,
+    }
+    @@augeas { &quot;backuppc_host_${config_name}-update&quot;:
+      context =&gt; &#39;/files/etc/BackupPC/hosts&#39;,
+      changes =&gt; template(&quot;${module_name}/host-augeas-update.erb&quot;),
+      lens    =&gt; &#39;BackupPCHosts.lns&#39;,
+      incl    =&gt; &#39;/etc/BackupPC/hosts&#39;,
+      onlyif  =&gt; &quot;match *[host = &#39;${config_name}&#39;] size &gt; 0&quot;,
+      tag     =&gt; &quot;backuppc_hosts_${backuppc_hostname}&quot;,
+    }
+  }
+
+  @@file { &quot;/etc/BackupPC/pc/${config_name}.pl&quot;:
+    ensure  =&gt; $file_ensure,
+    content =&gt; template(&quot;${module_name}/host.pl.erb&quot;),
+    owner   =&gt; &#39;backuppc&#39;,
+    mode    =&gt; &#39;0640&#39;,
+    tag     =&gt; &quot;backuppc_config_${backuppc_hostname}&quot;
+  }
+}</pre>
+      </td>
+    </tr>
+  </table>
+</div>
+</div>
+
+      <div id="footer">
+     Generated by <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>.
+</div>
+
+    </div>
+  </body>
+</html>
