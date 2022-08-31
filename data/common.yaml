@@ -1,0 +1,9 @@
+---
+backuppc::server::par_path: /usr/bin/par2
+backuppc::server::gzip_path: /usr/bin/gzip
+backuppc::server::bzip2_path: /usr/bin/bzip2
+backuppc::server::tar_path: /usr/bin/tar
+backuppc::server::ping_path: /usr/bin/ping
+backuppc::server::ping6_path: /usr/bin/ping6
+backuppc::client::rsync_path: /usr/bin/rsync
+backuppc::client::tar_path: /usr/bin/tar

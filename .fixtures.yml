@@ -1,7 +1,15 @@
+---
 fixtures:
-  symlinks:
-    "backuppc": "#{source_dir}"
-  repositories:
-    "stdlib":
-      repo: "git://github.com/puppetlabs/puppetlabs-stdlib.git"
-      ref: 4.3.1
+  forge_modules:
+    stdlib:
+      repo: "puppetlabs/stdlib"
+    augeas_core:
+      repo: "puppetlabs/augeas_core"
+    sshkeys_core:
+      repo: "puppetlabs/sshkeys_core"
+    epel:
+      repo: "puppet/epel"
+    yumrepo_core:
+      repo: "puppetlabs/yumrepo_core"
+    sudo:
+      repo: "saz/sudo"

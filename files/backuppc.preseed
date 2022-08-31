@@ -1,4 +1,0 @@
-backuppc  backuppc/tmppass                password
-backuppc  backuppc/configuration-note     note
-backuppc  backuppc/restart-webserver      boolean true
-backuppc  backuppc/reconfigure-webserver  multiselect

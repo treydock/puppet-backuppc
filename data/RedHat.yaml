@@ -1,0 +1,13 @@
+backuppc::server::package_name: BackupPC
+backuppc::server::config_dir: /etc/BackupPC
+backuppc::server::topdir: /var/lib/BackupPC
+backuppc::server::install_dir: /usr/share/BackupPC
+backuppc::server::cgi_dir: /usr/libexec/BackupPC
+backuppc::server::cgi_image_dir: /usr/share/BackupPC/html
+backuppc::server::cgi_image_dir_url: /BackupPC/images
+backuppc::server::log_dir: /var/log/BackupPC
+backuppc::server::run_dir: /var/run/BackupPC
+backuppc::server::apache_group: apache
+backuppc::server::tar_path: /usr/bin/gtar
+backuppc::server::rsync_bcp_path: /usr/bin/rsync_bpc
+backuppc::client::tar_path: /usr/bin/gtar

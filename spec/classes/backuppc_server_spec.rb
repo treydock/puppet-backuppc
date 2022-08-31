@@ -1,27 +1,45 @@
 require 'spec_helper'
 
-describe 'backuppc::server', :type => :class do
+describe 'backuppc::server' do
+  on_supported_os({
+    :supported_os => [
+      {
+        "operatingsystem" => "RedHat",
+        "operatingsystemrelease" => ["8"],
+      },
+      {
+        "operatingsystem" => "Debian",
+        "operatingsystemrelease" => ["11"],
+      },
+      {
+        "operatingsystem" => "Ubuntu",
+        "operatingsystemrelease" => ["22.04"],
+      }
+    ]
+  }).each do |os, facts|
+    context "on #{os}" do
+      let(:facts) do
+        facts
+      end
 
-  describe 'On an unknown operating system' do
-    let(:facts) {{ :osfamily => 'Unknown' }}
-    it 'should raise an error' do
-      expect { should compile }.to raise_error(/is not supported by this module/)
+      it { is_expected.to compile.with_all_deps }
     end
   end
 
-  context "On Ubuntu" do
-    let(:facts) {{ :osfamily => 'Debian' }}
-    let(:params) {{ :backuppc_password => 'test_password' }}
-    it { should create_class('backuppc::server') }
-    it { should contain_class("backuppc::params") }
-    it { should contain_package('backuppc') }
-  end
+  on_supported_os({
+    :supported_os => [
+      {
+        "operatingsystem" => "RedHat",
+        "operatingsystemrelease" => ["7"],
+      }
+    ]
+  }).each do |os, facts|
+    context "on #{os}" do
+      let(:facts) do
+        facts
+      end
 
-  context "On RedHat" do
-    let(:facts) {{ :osfamily => 'RedHat' }}
-    let(:params) {{ :backuppc_password => 'test_password' }}
-    it { should create_class('backuppc::server') }
-    it { should contain_class("backuppc::params") }
-    it { should contain_package('BackupPC') }
+      it { is_expected.not_to compile }
+    end
   end
 end
