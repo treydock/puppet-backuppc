@@ -167,7 +167,7 @@ class backuppc::server (
   Stdlib::Absolutepath $rsync_path = '/usr/bin/rsync',
   Stdlib::Absolutepath $tar_path = '/bin/gtar',
   Stdlib::Absolutepath $rsync_bpc_path = '/usr/bin/rsync_bpc',
-  Stdlib::Absolutepath $ping_path = '/usr/bin/ping',
+  Stdlib::Absolutepath $ping_path = '/usr/sbin/ping',
   Stdlib::Absolutepath $ping6_path = '/usr/sbin/ping6',
   Stdlib::Absolutepath $cgi_dir = '/usr/libexec/BackupPC',
   Stdlib::Absolutepath $cgi_image_dir = '/usr/share/BackupPC/html',
