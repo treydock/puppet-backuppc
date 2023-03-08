@@ -860,7 +860,7 @@ Data type: `Stdlib::Absolutepath`
 
 Path to ping
 
-Default value: `'/usr/bin/ping'`
+Default value: `'/usr/sbin/ping'`
 
 ##### <a name="ping6_path"></a>`ping6_path`
 
@@ -1109,7 +1109,8 @@ Data type: `Array[Backuppc::BlackoutPeriod]`
 config.pl BlackoutPeriods
 
 Default value: `[
-    { hour_begin =>  7.0,
+    {
+      hour_begin => 7.0,
       hour_end   => 19.5,
       week_days  => [1, 2, 3, 4, 5],
     }
@@ -1264,7 +1265,7 @@ Default value: `[]`
 
 ##### <a name="cgi_url"></a>`cgi_url`
 
-Data type: `Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl ]`
+Data type: `Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl]`
 
 config.pl CgiURL
 
