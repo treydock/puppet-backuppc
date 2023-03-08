@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 def server_supported
   if fact('os.family') == 'RedHat' && fact('os.release.major').to_s == '8'
     true

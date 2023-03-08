@@ -1,13 +1,15 @@
+# frozen_string_literal: true
+
 require 'spec_helper_acceptance'
 
 describe 'backuppc::client class' do
-  context 'default parameters' do
+  context 'with default parameters' do
     it 'runs successfully' do
-      pp = <<-EOS
+      pp = <<-PP
       class { 'backuppc::client':
         backuppc_hostname => 'localhost',
       }
-      EOS
+      PP
 
       apply_manifest(pp, catch_failures: true)
       apply_manifest(pp, catch_changes: true)
