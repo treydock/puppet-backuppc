@@ -205,7 +205,6 @@ class backuppc::client (
   Array $hosts_file_more_users = [],
   Boolean $export_sshkey = true,
 ) {
-
   case $ensure {
     'absent': {
       $file_ensure = 'absent'
@@ -374,6 +373,6 @@ class backuppc::client (
     content => template("${module_name}/host.pl.erb"),
     owner   => 'backuppc',
     mode    => '0640',
-    tag     => "backuppc_config_${backuppc_hostname}"
+    tag     => "backuppc_config_${backuppc_hostname}",
   }
 }

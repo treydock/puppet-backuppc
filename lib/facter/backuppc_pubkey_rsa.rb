@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 Facter.add('backuppc_pubkey_rsa') do
-  confine :osfamily => ['RedHat', 'Debian']
+  confine osfamily: ['RedHat', 'Debian']
 
   setcode do
     case Facter.value(:osfamily)
@@ -9,7 +11,7 @@ Facter.add('backuppc_pubkey_rsa') do
       sshkey_path = '/var/lib/backuppc/.ssh/id_rsa.pub'
     end
 
-    if File.exists?(sshkey_path)
+    if File.exist?(sshkey_path)
       File.read(sshkey_path).split(' ')[1]
     else
       nil
