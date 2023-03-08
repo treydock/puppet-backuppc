@@ -418,7 +418,7 @@
         <span class='type'>(<tt>Stdlib::Absolutepath</tt>)</span>
       
       
-        <em class="default">(defaults to: <tt>&#39;/usr/bin/ping&#39;</tt>)</em>
+        <em class="default">(defaults to: <tt>&#39;/usr/sbin/ping&#39;</tt>)</em>
       
       
         &mdash;
@@ -977,7 +977,8 @@
       
       
         <em class="default">(defaults to: <tt>[
-    { hour_begin =&gt;  7.0,
+    {
+      hour_begin =&gt; 7.0,
       hour_end   =&gt; 19.5,
       week_days  =&gt; [1, 2, 3, 4, 5],
     }
@@ -1323,7 +1324,7 @@
         <span class='name'>cgi_url</span>
       
       
-        <span class='type'>(<tt>Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl ]</tt>)</span>
+        <span class='type'>(<tt>Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl]</tt>)</span>
       
       
         <em class="default">(defaults to: <tt>&quot;http://${facts[&#39;networking&#39;][&#39;fqdn&#39;]}/backuppc&quot;</tt>)</em>
@@ -1701,7 +1702,7 @@ class backuppc::server (
   Stdlib::Absolutepath $rsync_path = &#39;/usr/bin/rsync&#39;,
   Stdlib::Absolutepath $tar_path = &#39;/bin/gtar&#39;,
   Stdlib::Absolutepath $rsync_bpc_path = &#39;/usr/bin/rsync_bpc&#39;,
-  Stdlib::Absolutepath $ping_path = &#39;/usr/bin/ping&#39;,
+  Stdlib::Absolutepath $ping_path = &#39;/usr/sbin/ping&#39;,
   Stdlib::Absolutepath $ping6_path = &#39;/usr/sbin/ping6&#39;,
   Stdlib::Absolutepath $cgi_dir = &#39;/usr/libexec/BackupPC&#39;,
   Stdlib::Absolutepath $cgi_image_dir = &#39;/usr/share/BackupPC/html&#39;,
@@ -1733,7 +1734,8 @@ class backuppc::server (
   Integer $archive_info_keep_cnt = 10,
   Integer $blackout_good_cnt = 7,
   Array[Backuppc::BlackoutPeriod] $blackout_periods = [
-    { hour_begin =&gt;  7.0,
+    {
+      hour_begin =&gt; 7.0,
       hour_end   =&gt; 19.5,
       week_days  =&gt; [1, 2, 3, 4, 5],
     }
@@ -1759,13 +1761,12 @@ class backuppc::server (
   },
   Variant[Array[String], String] $cgi_admin_user_group = [],
   Variant[Array[String], String] $cgi_admin_users = [],
-  Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl ] $cgi_url = &quot;http://${facts[&#39;networking&#39;][&#39;fqdn&#39;]}/backuppc&quot;,
+  Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl] $cgi_url = &quot;http://${facts[&#39;networking&#39;][&#39;fqdn&#39;]}/backuppc&quot;,
   Boolean $manage_user = true,
   Optional[Integer] $user_uid = undef,
   Stdlib::Absolutepath $user_shell = &#39;/sbin/nologin&#39;,
   Optional[Integer] $user_gid = undef,
 ) {
-
   $os_family = $facts[&#39;os&#39;][&#39;family&#39;]
   $os_major = $facts[&#39;os&#39;][&#39;release&#39;][&#39;major&#39;]
   $os = &quot;${os_family}-${os_major}&quot;
@@ -1912,8 +1913,8 @@ class backuppc::server (
     creates =&gt; &quot;${topdir}/.ssh/id_rsa&quot;,
     path    =&gt; [&#39;/usr/bin&#39;,&#39;/bin&#39;],
     require =&gt; [
-        Package[$package_name],
-        File[&quot;${topdir}/.ssh&quot;],
+      Package[$package_name],
+      File[&quot;${topdir}/.ssh&quot;],
     ],
   }
 

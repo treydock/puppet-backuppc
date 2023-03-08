@@ -1541,8 +1541,7 @@ authorized for backups</p>
 375
 376
 377
-378
-379</pre>
+378</pre>
       </td>
       <td>
         <pre class="code"><span class="info file"># File 'manifests/client.pp', line 139</span>
@@ -1616,7 +1615,6 @@ class backuppc::client (
   Array $hosts_file_more_users = [],
   Boolean $export_sshkey = true,
 ) {
-
   case $ensure {
     &#39;absent&#39;: {
       $file_ensure = &#39;absent&#39;
@@ -1785,7 +1783,7 @@ class backuppc::client (
     content =&gt; template(&quot;${module_name}/host.pl.erb&quot;),
     owner   =&gt; &#39;backuppc&#39;,
     mode    =&gt; &#39;0640&#39;,
-    tag     =&gt; &quot;backuppc_config_${backuppc_hostname}&quot;
+    tag     =&gt; &quot;backuppc_config_${backuppc_hostname}&quot;,
   }
 }</pre>
       </td>
