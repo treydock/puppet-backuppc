@@ -219,7 +219,7 @@ class backuppc::client (
   if $xfer_method in ['rsync', 'tar'] {
     if $xfer_method == 'rsync' {
       if $manage_rsync and $ensure == 'present' {
-        ensure_packages(['rsync'])
+        stdlib::ensure_packages(['rsync'])
       }
       $sudo_command_noexec = $rsync_path
     }
