@@ -7,19 +7,19 @@ describe 'backuppc::server' do
                     supported_os: [
                       {
                         'operatingsystem' => 'RedHat',
-                        'operatingsystemrelease' => ['8']
+                        'operatingsystemrelease' => ['8'],
                       },
                       {
                         'operatingsystem' => 'Debian',
-                        'operatingsystemrelease' => ['11']
+                        'operatingsystemrelease' => ['11'],
                       },
                       {
                         'operatingsystem' => 'Ubuntu',
-                        'operatingsystemrelease' => ['22.04']
-                      }
-                    ]
+                        'operatingsystemrelease' => ['22.04'],
+                      },
+                    ],
                   }).each do |os, facts|
-    context "on #{os}" do
+    context "when #{os}" do
       let(:facts) do
         facts
       end
@@ -32,11 +32,11 @@ describe 'backuppc::server' do
                     supported_os: [
                       {
                         'operatingsystem' => 'RedHat',
-                        'operatingsystemrelease' => ['7']
-                      }
-                    ]
+                        'operatingsystemrelease' => ['7'],
+                      },
+                    ],
                   }).each do |os, facts|
-    context "on #{os}" do
+    context "when #{os}" do
       let(:facts) do
         facts
       end

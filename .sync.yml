@@ -2,17 +2,16 @@
 .github/workflows/ci.yaml:
   acceptance_matrix:
       set:
-        - el7
+        - ---el7
         - el8
         - el9
-        - debian-10
         - debian-11
-        - ubuntu-1804
         - ubuntu-2004
         - ubuntu-2204
+        - ubuntu-2404
       puppet:
-        - puppet6
         - puppet7
+        - puppet8
 .gitlab-ci.yml:
   delete: true
 appveyor.yml:
